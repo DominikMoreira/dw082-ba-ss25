@@ -18,16 +18,3 @@ hdm-dw082-ba-ss25/
 
 ## Beispiel für einen Evaluierungslauf
 So könnte ein typischer Evaluierungslauf aussehen:
-
-**Erstelle eine virtuelle Umgebung**
-```
-python -m venv venv
-source venv/bin/activate
-```
-
-**Installiere Abhängigkeiten**
-```pip install -r requirements.txt```
-
-**Führe die Evaluierung aus**
-```python src/main.py```
-
