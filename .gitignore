@@ -12,5 +12,5 @@ wheels/
 
 # __pycache__/
 # __init__.py
-data/*.csv
+data/
 notebooks/*.ipynb

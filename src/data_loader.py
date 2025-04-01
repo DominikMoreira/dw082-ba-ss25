@@ -48,4 +48,28 @@ def get_data():
     """Main function for loading and preprocessing the data."""
     df = load_data()
     train_df, test_df, val_df = split_data(df)
+    export_dataframes_to_csv(train_df, test_df, val_df)
     return train_df, test_df, val_df
+
+def export_dataframes_to_csv(train_df, test_df, val_df, output_path='data/processed/'):
+    """
+    Export train, test and validation dataframes to CSV files.
+
+    Args:
+        train_df: Training dataframe
+        test_df: Test dataframe
+        val_df: Validation dataframe
+        output_path: Path where CSV files should be saved
+    """
+    import os
+
+    # Create directory if it doesn't exist
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
+
+    # Export each dataframe
+    train_df.to_csv(os.path.join(output_path, 'train.csv'), index=False)
+    test_df.to_csv(os.path.join(output_path, 'test.csv'), index=False)
+    val_df.to_csv(os.path.join(output_path, 'val.csv'), index=False)
+
+    print(f"Dataframes exported to {output_path}")

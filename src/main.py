@@ -7,20 +7,28 @@ from evaluator import evaluate_model, save_results
 def main():
     # Daten laden
     df = get_data()
+    train_df, test_df, val_df = df
 
-    # Modell laden (Beispiel mit BERT)
-    model = get_model('bert-base-uncased')
+    # Modell laden
+    model = get_model('distilbert/distilbert-base-uncased')
 
-    # Vorhersagen machen
-    predictions = model.predict(df['text'].tolist())
+    print("Starte Tokenisierung ...")
+    # token_val = [str(i) for i in train_df['cleaned_review'].values]
+    train_encodings = model.tokenize(train_df)
+    test_encodings = model.tokenize(test_df)
+    val_encodings = model.tokenize(val_df)
+    print("Tokenisierung abgeschlossen.")
 
-    # Evaluieren (angenommen, 'label' ist die Zielvariable in Ihrem DataFrame)
-    results = evaluate_model(predictions, df['label'].tolist())
+    # # Vorhersagen machen
+    # predictions = model.predict(tokenized_reviews)
 
-    # Ergebnisse speichern
-    save_results(results, 'bert-base-uncased')
+    # # Evaluieren (angenommen, 'label' ist die Zielvariable in Ihrem DataFrame)
+    # results = evaluate_model(predictions, df['label'].tolist())
 
-    print("Evaluierung abgeschlossen. Ergebnisse wurden gespeichert.")
+    # # Ergebnisse speichern
+    # save_results(results, 'bert-base-uncased')
+
+    # print("Evaluierung abgeschlossen. Ergebnisse wurden gespeichert.")
 
 if __name__ == "__main__":
     main()
