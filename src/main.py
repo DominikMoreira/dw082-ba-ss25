@@ -1,4 +1,4 @@
-# Orchestriert den gesamten Prozess.
+# Orchestrates the entire process.
 import pandas as pd
 
 from data_loader import load_data, split_data
@@ -7,12 +7,14 @@ from model_handler import get_model
 from evaluator import evaluate_model, save_results
 
 def main():
+    print(" ============= Starting Programm =============")
     # Load Pandas DataFrame containing the data from CSV file
-    df = load_data()
+    df_cleaned_reviews = load_data()
 
     # Extract aspects from the reviews
-    extract_aspects(df['cleaned_review'].values)
-    print("Fertig")
+    df = extract_aspects(df_cleaned_reviews[0:3]['cleaned_review'].values) # XXXXXXXXXX [0:3] for testing
+    print(f"XXXXXXXXXXXX DEBUG {df}")
+    print(" ============= DataFrame with review & aspects created =============")
 
     # # Trainingsdaten aufteilen
     # train_df, test_df, val_df = split_data(df)

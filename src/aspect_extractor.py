@@ -1,28 +1,30 @@
 import spacy
+import pandas as pd
 
 def extract_aspects(reviews):
-    print("TEST ",type(reviews))
     """
-    Extracts aspects from a list of reviews using spaCy's noun chunks.
+    Extracts aspects from a list of reviews using spaCy's noun chunks
+    and adds them to a new column in a DataFrame.
 
     Args:
         reviews (list): A list of review strings.
 
     Returns:
-        set: A set of unique aspects extracted from the reviews.
+        pd.DataFrame: A DataFrame with reviews and their extracted aspects.
     """
-
     nlp = spacy.load("de_core_news_sm")
-    aspects = set()
+
+    # Create an empty list to store results
+    data = []
 
     for review in reviews:
         doc = nlp(review)
-        for chunk in doc.noun_chunks:
-            aspects.add(chunk.root.text.lower())
+        # Extract aspects (noun chunks)
+        aspects = [chunk.root.text.lower() for chunk in doc.noun_chunks]
 
-    print("Extracted Aspects:", aspects)
-    return aspects
+        # Append review and its aspects to the data list
+        data.append({"review": review, "aspects": aspects})
 
-
-
-
+    # Convert the data into a pandas DataFrame
+    df = pd.DataFrame(data)
+    return df

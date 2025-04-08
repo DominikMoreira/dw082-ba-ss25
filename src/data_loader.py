@@ -6,8 +6,6 @@ from sklearn.model_selection import train_test_split
 def load_data(file_path='data/cleaned_reviews.csv'):
     # Loads the data from the CSV file.
     df = pd.read_csv(file_path)
-    df = df[0:3]
-    print(df["cleaned_review"])
     return df
 
 def split_data(df, random_state=42):
