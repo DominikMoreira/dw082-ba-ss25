@@ -4,8 +4,10 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 
 def load_data(file_path='data/cleaned_reviews.csv'):
-    """ Loads the data from the CSV file. """
+    # Loads the data from the CSV file.
     df = pd.read_csv(file_path)
+    df = df[0:3]
+    print(df["cleaned_review"])
     return df
 
 def split_data(df, random_state=42):
@@ -42,13 +44,6 @@ def split_data(df, random_state=42):
     print(f"Test set size: {len(test_df)} ({len(test_df)/len(df)*100:.1f}%)")
     print(f"Validation set size: {len(val_df)} ({len(val_df)/len(df)*100:.1f}%)")
 
-    return train_df, test_df, val_df
-
-def get_data():
-    """Main function for loading and preprocessing the data."""
-    df = load_data()
-    train_df, test_df, val_df = split_data(df)
-    export_dataframes_to_csv(train_df, test_df, val_df)
     return train_df, test_df, val_df
 
 def export_dataframes_to_csv(train_df, test_df, val_df, output_path='data/processed/'):
