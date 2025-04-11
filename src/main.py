@@ -12,22 +12,24 @@ def main():
     df_cleaned_reviews = load_data()
 
     # Extract aspects from the reviews
-    df = extract_aspects(df_cleaned_reviews[0:3]['cleaned_review'].values) # XXXXXXXXXX [0:3] for testing
-    print(f"XXXXXXXXXXXX DEBUG {df}")
-    print(" ============= DataFrame with review & aspects created =============")
+    df = extract_aspects(
+        df_cleaned_reviews[0:3]['cleaned_review'].values, # XXXXXXXXXX [0:3] for testing
+        df_cleaned_reviews[0:3]['Sentiment'].values) # XXXXXXXXXX [0:3] for testing
+    print(" ============= DataFrame with review, aspects and sentiment created =============")
 
-    # # Trainingsdaten aufteilen
+    # # Split the data into training, test, and validation sets
     # train_df, test_df, val_df = split_data(df)
 
-    # # Modell laden
+    # initlialize model
     # model = get_model('distilbert/distilbert-base-uncased')
+    # print(" ============= Model initialized =============")
 
-    # print("Starte Tokenisierung ...")
-    # # token_val = [str(i) for i in train_df['cleaned_review'].values]
+    # print(" ============= Start tokenizing data =============")
     # train_encodings = model.tokenize(train_df)
     # test_encodings = model.tokenize(test_df)
     # val_encodings = model.tokenize(val_df)
-    # print("Tokenisierung abgeschlossen.")
+    # print(train_encodings)
+    # print(" ============= Finished tokenizing =============")
 
     # # Vorhersagen machen
     # predictions = model.predict(tokenized_reviews)
