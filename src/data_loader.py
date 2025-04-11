@@ -1,6 +1,7 @@
 # Lädt und verarbeitet die Daten aus "cleaned_reviews.csv".
 
 import pandas as pd
+import spacy
 from sklearn.model_selection import train_test_split
 
 def load_data(file_path='data/cleaned_reviews.csv'):
@@ -26,7 +27,6 @@ def split_data(df, random_state=42):
     train_val_df, test_df = train_test_split(
         df,
         test_size=0.2,
-        stratify=df['Rating'],
         random_state=random_state
     )
 
@@ -34,7 +34,6 @@ def split_data(df, random_state=42):
     train_df, val_df = train_test_split(
         train_val_df,
         test_size=0.125,  # 0.125 * 80% = 10% of total data
-        stratify=train_val_df['Rating'],
         random_state=random_state
     )
 
@@ -66,3 +65,23 @@ def export_dataframes_to_csv(train_df, test_df, val_df, output_path='data/proces
     val_df.to_csv(os.path.join(output_path, 'val.csv'), index=False)
 
     print(f"Dataframes exported to {output_path}")
+
+def lemmatize_reviews_in_dataframe(df):
+    """
+    Lemmatizes the reviews in the 'cleaned_review' column of a pandas DataFrame.
+
+    Args:
+        df (pandas.DataFrame): A DataFrame containing a 'cleaned_review' column with text data.
+
+    Returns:
+        pandas.DataFrame: The same DataFrame with the 'cleaned_review' column lemmatized.
+    """
+    nlp = spacy.load("de_core_news_lg")
+
+    def lemmatize_text(text):
+        doc = nlp(text)
+        lemmatized_text = " ".join([token.lemma_ for token in doc])
+        return lemmatized_text
+
+    df['cleaned_review'] = df['cleaned_review'].apply(lemmatize_text)
+    return df
