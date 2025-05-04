@@ -9,12 +9,12 @@ from openaiAPI import OpenAIClient
 def run_syn_chain_zero_shot(review: str, client: OpenAIClient):
     # Step 1: Aspekt Extraction
     user1 = USER_TEMPLATE_ASPECT.substitute(review=review)
-    aspects_raw = client.request(SYSTEM_PROMPT_ASPECT, user1)
+    aspects_raw = client.request(user1, SYSTEM_PROMPT_ASPECT)
     aspects = [aspect.strip() for aspect in aspects_raw.split(",") if aspect.strip()]
 
     # Step 2: Polarity Extraction
     user2 = USER_TEMPLATE_POLARITY.substitute(review=review, aspects=", ".join(aspects))
-    polarity_str = client.request(SYSTEM_PROMPT_POLARITY, user2)
+    polarity_str = client.request(user2, SYSTEM_PROMPT_POLARITY)
     polarities = dict(
         item.split(": ")
         for item in polarity_str.strip("{}").split(";")
@@ -25,7 +25,7 @@ def run_syn_chain_zero_shot(review: str, client: OpenAIClient):
         review=review,
         polarities="; ".join(f"{k}: {v}" for k,v in polarities.items())
     )
-    justification = client.request(SYSTEM_PROMPT_VAL, user3)
+    justification = client.request(user3, SYSTEM_PROMPT_VAL)
 
     return {
         "aspects": aspects,
