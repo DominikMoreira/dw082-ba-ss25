@@ -6,7 +6,8 @@ from string import Template
 
 SYSTEM_PROMPT_ASPECT = (
     "Du bist ein Experte für aspektbasierte Stimmungsanalyse. "
-    "Extrahiere alle Aspektbegriffe, die in der folgenden Rezension erwähnt werden. "
+    "Extrahiere alle Aspekte die in der Rezension erwähnt werden und ordne sie jeweils einem der folgenden "
+    "Aspektkateogrien zu: GESCHMACK, VERPACKUNG, QUALITÄT, PREIS, LIEFERUNG, SONSTIGES. "
     "Antworte mit einer kommagetrennten Liste."
 )
 
