@@ -4,7 +4,7 @@ import pandas as pd
 import spacy
 from sklearn.model_selection import train_test_split
 
-def load_data(file_path='data/cleaned_reviews.csv'):
+def load_data(file_path='data/raw/combined_dataframe.csv'):
     # Loads the data from the CSV file.
     df = pd.read_csv(file_path)
     return df
