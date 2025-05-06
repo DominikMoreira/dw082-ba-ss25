@@ -6,7 +6,6 @@ from sklearn.metrics import precision_recall_fscore_support
 class ABSAEvaluator:
     def __init__(self, path_csv: str):
         self.df = pd.read_csv(path_csv)
-        print(f"XXXXXX Loaded {len(self.df)} rows from {path_csv}")
         self.records = []
 
     def _parse_labels(self, label_str: str):
