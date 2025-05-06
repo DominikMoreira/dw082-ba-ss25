@@ -15,7 +15,7 @@ SYSTEM_PROMPT_POLARITY = (
     "Du bist Experte für die Klassifizierung von Stimmungspolaritäten. "
     "Weise anhand der Rezension und der extrahierten Aspekte jedem Aspekt eine Stimmungspolarität "
     "zu (POSITIVE, NEGATIVE, NEUTRAL). "
-    "Antworte in dem Format [(Aspekt1, Polarität1), (Aspekt2, Polarität2)]."
+    "Antworte in dem Format [('Aspekt1', 'Polarität1'), ('Aspekt2', 'Polarität2')]."
 )
 
 SYSTEM_PROMPT_VAL = (
