@@ -98,7 +98,7 @@ class ABSAEvaluator:
         with open(out_path, 'w', encoding='utf-8') as f:
             json.dump(metrics, f, indent=2, ensure_ascii=False)
 
-if __name__ == "__main__":
-    evaluator = ABSAEvaluator("data/results/zero_shot_results.csv")
-    evaluator.save("data/results/absa_evaluation.json")
-    print("Evaluation abgeschlossen und gespeichert unter data/results/absa_evaluation.json")
+# if __name__ == "__main__":
+#     evaluator = ABSAEvaluator("data/results/zero_shot_results.csv")
+#     evaluator.save("data/results/absa_evaluation.json")
+#     print("Evaluation abgeschlossen und gespeichert unter data/results/absa_evaluation.json")

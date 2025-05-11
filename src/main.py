@@ -6,7 +6,7 @@ from openaiAPI import OpenAIClient
 from data_loader import load_data, lemmatize_reviews_in_dataframe, split_data
 from aspect_extractor import extract_aspects, get_unique_aspects
 from model_handler import get_model
-from evaluate import evaluate_model, save_results
+from evaluate import ABSAEvaluator
 
 def main():
     print(" ============= Starting Programm =============")
@@ -38,7 +38,12 @@ def main():
     results_df.to_csv('data/results/zero_shot_results.csv', index=False)
     print(" ---=== Zero-Shot Pipeline finished ===--- ")
 
-
+    # Evaluate results
+    print(" ---=== Evaluate results start ===--- ")
+    evaluator = ABSAEvaluator('data/results/zero_shot_results.csv')
+    evaluator.save("data/results/absa_evaluation.json")
+    print("Evaluation abgeschlossen und gespeichert unter data/results/absa_evaluation.json")
+    print(" ---=== Evaluate results finished ===--- ")
 
 
     # # Split the data into training, test, and validation sets
