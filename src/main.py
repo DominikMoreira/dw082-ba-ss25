@@ -42,7 +42,7 @@ def main():
     print(" ---=== Evaluate results start ===--- ")
     evaluator = ABSAEvaluator('data/results/zero_shot_results.csv')
     evaluator.save("data/results/absa_evaluation.json")
-    print("Evaluation abgeschlossen und gespeichert unter data/results/absa_evaluation.json")
+    print("Evaluation finished and saved under data/results/absa_evaluation.json")
     print(" ---=== Evaluate results finished ===--- ")
 
 
