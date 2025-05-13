@@ -55,6 +55,18 @@ Beispiel 3:
 Review: "Ich habe bisher Meersalz verwendet und möchte dieses für das Jod untermischen."
 Antwort: SONSTIGES
 
+Beispiel 4:
+Review: "Riecht und schmeckt fischig - trinken kann ich das nicht...."
+Antwort: GESCHMACK
+
+Beispiel 5:
+Review: "Scan-Etikett liest Chicken Pho auf der Spicy Beef Box. Als ich das Klebeband abnahm, war die erste Packung (vermutlich aus Versehen) mit einem Kartonschneider aufgeschnitten worden. Amazon sagt, dass dieser Artikel nicht für eine Rückerstattung oder einen Ersatz in Frage kommt und ich stecke in einer Schleife fest, die mich nicht weiterbringt. Es gibt keine Telefonnummer, die ich anrufen kann, und ich koche dieses Wochenende PHO-Suppe für 50 Leute und habe Angst, mehr zu bestellen und weitere 22 Dollar auszugeben. Total deprimiert."
+Antwort: KUNDENSERVICE, VERPACKUNG
+
+Beispiel 6:
+Review: "der Tee erzielte bei mir nicht die Wirkung, wie hier in einigen Rezessionen beschrieben, als Tee aber ok. Ein Stoffwechsel, oder abnehmen hat bei mir nicht stattgefunden."
+Antwort: QUALITÄT
+
 Jetzt du:
 Review: "$review"
 Antwort:""")
@@ -75,6 +87,21 @@ Beispiel 3:
 Review: "Ich habe bisher Meersalz verwendet und möchte dieses für das Jod untermischen."
 Aspekte: SONSTIGES
 Antwort: [('SONSTIGES', 'NEUTRAL')]
+
+Beispiel 4:
+Review: "Riecht und schmeckt fischig - trinken kann ich das nicht...."
+Aspekte: GESCHMACK
+Antwort: [('GESCHMACK', 'NEGATIVE')]
+
+Beispiel 5:
+Review: "Scan-Etikett liest Chicken Pho auf der Spicy Beef Box. Als ich das Klebeband abnahm, war die erste Packung (vermutlich aus Versehen) mit einem Kartonschneider aufgeschnitten worden. Amazon sagt, dass dieser Artikel nicht für eine Rückerstattung oder einen Ersatz in Frage kommt und ich stecke in einer Schleife fest, die mich nicht weiterbringt. Es gibt keine Telefonnummer, die ich anrufen kann, und ich koche dieses Wochenende PHO-Suppe für 50 Leute und habe Angst, mehr zu bestellen und weitere 22 Dollar auszugeben. Total deprimiert."
+Aspekte: KUNDENSERVICE, VERPACKUNG
+Antwort: [('KUNDENSERVICE', 'NEGATIVE'), ('VERPACKUNG', 'NEGATIVE')]
+
+Beispiel 6:
+Review: "der Tee erzielte bei mir nicht die Wirkung, wie hier in einigen Rezessionen beschrieben, als Tee aber ok. Ein Stoffwechsel, oder abnehmen hat bei mir nicht stattgefunden."
+Aspekte: QUALITÄT
+Antwort: [('QUALITÄT', 'NEUTRAL')]
 
 Jetzt du:
 Review: "$review"
@@ -102,6 +129,25 @@ Review: "Ich habe bisher Meersalz verwendet und möchte dieses für das Jod unte
 Polarities: [('SONSTIGES', 'NEUTRAL')]
 Antwort:
 SONSTIGES: NEUTRAL – Es wird keine klare positive oder negative Meinung geäußert, sondern eine neutrale Information gegeben.
+
+Beispiel 4:
+Review: "Riecht und schmeckt fischig - trinken kann ich das nicht...."
+Polarities: [('GESCHMACK', 'NEGATIVE')]
+Antwort:
+GESCHMACK: NEGATIVE – Der Geschmack wird als fischig und ungenießbar beschrieben, daher negativ bewertet.
+
+Beispiel 5:
+Review: "Scan-Etikett liest Chicken Pho auf der Spicy Beef Box. Als ich das Klebeband abnahm, war die erste Packung (vermutlich aus Versehen) mit einem Kartonschneider aufgeschnitten worden. Amazon sagt, dass dieser Artikel nicht für eine Rückerstattung oder einen Ersatz in Frage kommt und ich stecke in einer Schleife fest, die mich nicht weiterbringt. Es gibt keine Telefonnummer, die ich anrufen kann, und ich koche dieses Wochenende PHO-Suppe für 50 Leute und habe Angst, mehr zu bestellen und weitere 22 Dollar auszugeben. Total deprimiert."
+Polarities: [('KUNDENSERVICE', 'NEGATIVE'), ('VERPACKUNG', 'NEGATIVE')]
+Antwort:
+KUNDENSERVICE: NEGATIVE – Amazon lehnt Rückerstattung oder Ersatz ab, bietet keine erreichbare Telefonnummer und hält den Kunden in einer nicht endenden Schleife gefangen, was zu Frust und Hilflosigkeit führt.
+VERPACKUNG: NEGATIVE – Die erste Packung war offenbar versehentlich mit einem Kartonschneider aufgeschnitten und damit beschädigt angekommen.
+
+Beispiel 6:
+Review: "der Tee erzielte bei mir nicht die Wirkung, wie hier in einigen Rezessionen beschrieben, als Tee aber ok. Ein Stoffwechsel, oder abnehmen hat bei mir nicht stattgefunden."
+Polarities: [('QUALITÄT', 'NEUTRAL')]
+Antwort:
+QUALITÄT: NEUTRAL – Der Tee wird als „ok“ beschrieben, aber es wird keine klare positive oder negative Meinung geäußert. Die Wirkung ist nicht wie erwartet, was neutral bewertet wird.
 
 Jetzt du:
 Review: "$review"
