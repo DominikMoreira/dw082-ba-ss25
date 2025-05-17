@@ -2,14 +2,14 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import ast
-from collections import defaultdict # Added import
+from collections import defaultdict
 
 
 class Recommender:
     def __init__(self, csv_filepath):
         self.csv_filepath = csv_filepath
         self.data = None
-        self.aspect_sentiments = defaultdict(lambda: defaultdict(int)) # Changed initialization
+        self.aspect_sentiments = defaultdict(lambda: defaultdict(int))
 
 
     def _load_and_process_data(self, label_column=""):
@@ -134,18 +134,11 @@ class Recommender:
             plt.show()
 
 if __name__ == '__main__':
-    # This is an example of how to use the class.
-    # You'll need to adjust the file path to where your CSV is located.
-    # The path in the prompt was absolute, so using it directly here for the example.
     csv_file = 'data/results/few_shot_results.csv'
-
-    # Create an instance of the visualizer
     visualizer = Recommender(csv_filepath=csv_file)
-
-    # Create and show the diagram using 'true_labels'
     print("Generating diagram for 'predicted_labels'...")
     visualizer.create_diagram(label_column='predicted_labels')
 
     # Example: Create and save the diagram using 'predicted_labels' to a file
     # print("\nGenerating diagram for 'predicted_labels' and saving to file...")
-    # visualizer.create_diagram(label_column='predicted_labels', output_path='predicted_sentiments_diagram.png')
+    # visualizer.create_diagram(label_column='predicted_labels', output_path='data/results/predicted_sentiments_diagram.png')
