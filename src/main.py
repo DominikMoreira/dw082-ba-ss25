@@ -8,6 +8,7 @@ from data_loader import load_data, lemmatize_reviews_in_dataframe, split_data
 from aspect_extractor import extract_aspects, get_unique_aspects
 from model_handler import get_model
 from evaluate import ABSAEvaluator
+from recommender import Recommender
 
 def main():
 # ──────────────────────────────────────────────────────────────────────────────
@@ -79,6 +80,18 @@ def main():
     evaluator.save("data/results/eval_synchain_few_shot.json")
     print("Evaluation finished and saved under data/results/")
     print(" ---=== Evaluate results finished ===--- ")
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Create diagram
+# ──────────────────────────────────────────────────────────────────────────────
+    print(" ---=== Create diagrams start ===--- ")
+    visualizer = Recommender(csv_filepath="data/results/few_shot_results.csv")
+    print("Generating diagram for 'predicted_labels'...")
+    visualizer.create_diagram(label_column='predicted_labels')
+    # Example: Create and save the diagram using 'predicted_labels' to a file
+    # print("\nGenerating diagram for 'predicted_labels' and saving to file...")
+    # visualizer.create_diagram(label_column='predicted_labels', output_path='data/results/predicted_sentiments_diagram.png')
+    print(" ---=== Create diagrams finished ===--- ")
 
 
 # ──────────────────────────────────────────────────────────────────────────────

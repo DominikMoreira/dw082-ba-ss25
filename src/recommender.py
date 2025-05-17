@@ -133,12 +133,12 @@ class Recommender:
         else:
             plt.show()
 
-if __name__ == '__main__':
-    csv_file = 'data/results/few_shot_results.csv'
-    visualizer = Recommender(csv_filepath=csv_file)
-    print("Generating diagram for 'predicted_labels'...")
-    visualizer.create_diagram(label_column='predicted_labels')
+# if __name__ == '__main__':
+#     csv_file = 'data/results/few_shot_results.csv'
+#     visualizer = Recommender(csv_filepath=csv_file)
+#     print("Generating diagram for 'predicted_labels'...")
+#     visualizer.create_diagram(label_column='predicted_labels')
 
-    # Example: Create and save the diagram using 'predicted_labels' to a file
-    # print("\nGenerating diagram for 'predicted_labels' and saving to file...")
-    # visualizer.create_diagram(label_column='predicted_labels', output_path='data/results/predicted_sentiments_diagram.png')
+#     # Example: Create and save the diagram using 'predicted_labels' to a file
+#     # print("\nGenerating diagram for 'predicted_labels' and saving to file...")
+#     # visualizer.create_diagram(label_column='predicted_labels', output_path='data/results/predicted_sentiments_diagram.png')
