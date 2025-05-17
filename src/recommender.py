@@ -12,7 +12,7 @@ class Recommender:
         self.aspect_sentiments = defaultdict(lambda: defaultdict(int)) # Changed initialization
 
 
-    def _load_and_process_data(self, label_column="predicted_labels"):
+    def _load_and_process_data(self, label_column=""):
 
         # Load the CSV file
         try:
@@ -101,12 +101,6 @@ class Recommender:
         r2 = [x + bar_width for x in r1]
         r3 = [x + bar_width for x in r2]
 
-        # If only two sentiments are dominant, adjust bar positions
-        # For three sentiments:
-        # r1 = np.arange(num_aspects) - bar_width
-        # r2 = np.arange(num_aspects)
-        # r3 = np.arange(num_aspects) + bar_width
-        # Let's stick to a clear grouping:
         index_positions = np.arange(num_aspects)
 
 
