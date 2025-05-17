@@ -31,11 +31,11 @@ def main():
 
     print(" ---=== Zero-Shot Pipeline start ===--- ")
     client = OpenAIClient()
-    results_df = process_reviews_with_zero_shot(df_subset_for_testing, client)
+    results_df_zero = process_reviews_with_zero_shot(df_subset_for_testing, client)
 
     # Display comparison
     print("\nResults Comparison:")
-    for idx, row in results_df.iterrows():
+    for idx, row in results_df_zero.iterrows():
         print(f"\nReview {idx + 1}:")
         print(f"Text: {row['review_body'][:100]}...")
         print(f"True labels: {row['true_labels']}")
@@ -43,7 +43,7 @@ def main():
         print("-" * 80)
 
     # Save results
-    results_df.to_csv('data/results/zero_shot_results.csv', index=False)
+    results_df_zero.to_csv('data/results/zero_shot_results.csv', index=False)
     print(" ---=== Zero-Shot Pipeline finished ===--- ")
 
     # Evaluate results
@@ -58,11 +58,11 @@ def main():
 # ──────────────────────────────────────────────────────────────────────────────
     print(" ---=== Few-Shot Pipeline start ===--- ")
     client = OpenAIClient()
-    results_df = process_reviews_with_few_shot(df_subset_for_testing, client)
+    results_df_few = process_reviews_with_few_shot(df_subset_for_testing, client)
 
     # Display comparison
     print("\nResults Comparison:")
-    for idx, row in results_df.iterrows():
+    for idx, row in results_df_few.iterrows():
         print(f"\nReview {idx + 1}:")
         print(f"Text: {row['review_body'][:100]}...")
         print(f"True labels: {row['true_labels']}")
@@ -70,7 +70,7 @@ def main():
         print("-" * 80)
 
     # Save results
-    results_df.to_csv('data/results/few_shot_results.csv', index=False)
+    results_df_few.to_csv('data/results/few_shot_results.csv', index=False)
     print(" ---=== Few-Shot Pipeline finished ===--- ")
 
     # Evaluate results
