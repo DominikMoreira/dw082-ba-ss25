@@ -33,7 +33,7 @@ def main():
 
     print(" ---=== Zero-Shot Pipeline start ===--- ")
     client = OpenAIClient()
-    results_df_zero = process_reviews_with_zero_shot(df_subset_for_testing, client)
+    results_df_zero = process_reviews_with_zero_shot(df_subset_for_testing, client, model="gpt-4.1-nano")
 
     # Display comparison
     print("\nResults Comparison:")
@@ -60,7 +60,7 @@ def main():
 # ──────────────────────────────────────────────────────────────────────────────
     print(" ---=== Few-Shot Pipeline start ===--- ")
     client = OpenAIClient()
-    results_df_few = process_reviews_with_few_shot(df_subset_for_testing, client)
+    results_df_few = process_reviews_with_few_shot(df_subset_for_testing, client, model="gpt-4.1-nano")
 
     # Display comparison
     print("\nResults Comparison:")
@@ -88,7 +88,7 @@ def main():
 # ──────────────────────────────────────────────────────────────────────────────
     print(" ---=== Finetuned Pipeline start ===--- ")
     client = OpenAIClient()
-    results_df_fine = process_reviews_with_finetuned(df_subset_for_testing, client)
+    results_df_fine = process_reviews_with_finetuned(df_subset_for_testing, client, model="ft:gpt-4.1-nano-2025-04-14:personal:finetuned:BZIxyrTy")
 
     # Display comparison
     print("\nResults Comparison:")

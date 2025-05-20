@@ -34,9 +34,9 @@ def extract_first_elements(list_of_tuples):
 
     return first_elements
 
-def run_finetuned(review: str, client: OpenAIClient):
+def run_finetuned(review: str, client: OpenAIClient, model):
     user = USER_TEMPLATE_ABSA_FINETUNED.substitute(review=review)
-    response_labels = client.request(user, SYSTEM_PROMPT_FINETUNED) # This is expected to be like [('ASPECT', 'POLARITY'), ...]
+    response_labels = client.request(model, user, SYSTEM_PROMPT_FINETUNED) # This is expected to be like [('ASPECT', 'POLARITY'), ...]
 
     # Ensure response_labels is a list, even if the model returns a string representation of a list
     # This might need more robust parsing depending on actual model output format
@@ -61,7 +61,7 @@ def run_finetuned(review: str, client: OpenAIClient):
         "predicted_labels": response_labels
     }
 
-def process_reviews_with_finetuned(df, client):
+def process_reviews_with_finetuned(df, client, model):
     """
     Process reviews and add predictions to DataFrame.
 
@@ -78,7 +78,7 @@ def process_reviews_with_finetuned(df, client):
     for idx, row in df.iterrows():
         print(f"Processing review {idx + 1}/{len(df)}")
         try:
-            result = run_finetuned(row['review_body'], client)
+            result = run_finetuned(row['review_body'], client, model)
             results.append(result)
         except Exception as e:
             print(f"Error processing review {idx}: {str(e)}")
