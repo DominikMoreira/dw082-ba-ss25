@@ -24,6 +24,16 @@ SYSTEM_PROMPT_VAL = (
     "Gebe eine kurze Begründung für jedes Paar „Aspekt: Polarität. "
 )
 
+SYSTEM_PROMPT_FINETUNED = (
+    "Du bist ein Experte für aspektbasierte Stimmungsanalyse und die Klassifizierung von Stimmungspolaritäten. "
+    "Extrahiere alle Aspekte, die in der Rezension erwähnt werden und ordne sie jeweils einer der folgenden Aspektkategorien zu: GESCHMACK, VERPACKUNG, QUALITÄT, PREIS, LIEFERUNG, SONSTIGES."
+    "Weise anschließend anhand der Rezension und der extrahierten Aspekte jedem Aspekt eine Stimmungspolarität zu (POSITIVE, NEGATIVE, NEUTRAL)."
+    "Antworte im Format:"
+    "[('Aspektkategorie1', 'Polarität1'), ('Aspektkategorie2', 'Polarität2'), ...]"
+    "Beispiel:"
+    "[('KUNDENSERVICE', 'NEGATIVE'), ('VERPACKUNG', 'NEGATIVE')]"
+)
+
 # ──────────────────────────────────────────────────────────────────────────────
 # User-Prompt-Templates Zero-Shot
 # ──────────────────────────────────────────────────────────────────────────────
@@ -153,3 +163,9 @@ Jetzt du:
 Review: "$review"
 Polarities: $polarities
 Antwort:""")
+
+# ──────────────────────────────────────────────────────────────────────────────
+# User-Prompt-Templates Fine-Tuned
+# ──────────────────────────────────────────────────────────────────────────────
+
+USER_TEMPLATE_ABSA_FINETUNED = Template("Review:\n$review")
