@@ -5,9 +5,7 @@ from pipe_synchain_zero_shot import process_reviews_with_zero_shot
 from pipe_synchain_few_shot import process_reviews_with_few_shot
 from pipe_finetuned_gpt import process_reviews_with_finetuned
 from openaiAPI import OpenAIClient
-from data_loader import load_data, lemmatize_reviews_in_dataframe, split_data
-from aspect_extractor import extract_aspects, get_unique_aspects
-from model_handler import get_model
+from data_loader import load_data
 from evaluate import ABSAEvaluator
 from recommender import Recommender
 
