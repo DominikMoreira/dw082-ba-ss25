@@ -61,24 +61,26 @@ def run_finetuned(review: str, client: OpenAIClient, model):
         "predicted_labels": response_labels
     }
 
-def process_reviews_with_finetuned(df, client, model):
+def process_reviews_with_finetuned(df, client, model, text_column='review_body'):
     """
     Process reviews and add predictions to DataFrame.
 
     Args:
-        df: DataFrame with 'review_body' and 'true_labels' columns
+        df: DataFrame with text column and optionally 'true_labels' column
         client: OpenAIClient instance
+        model: Model name to use
+        text_column: Name of the column containing the text to analyze (default: 'review_body')
 
     Returns:
         DataFrame with added 'predicted_labels' column
     """
     results = []
 
-    print("\nProcessing reviews...")
+    print(f"\nProcessing reviews from column '{text_column}'...")
     for idx, row in df.iterrows():
         print(f"Processing review {idx + 1}/{len(df)}")
         try:
-            result = run_finetuned(row['review_body'], client, model)
+            result = run_finetuned(row[text_column], client, model)
             results.append(result)
         except Exception as e:
             print(f"Error processing review {idx}: {str(e)}")
