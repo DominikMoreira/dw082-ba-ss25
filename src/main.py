@@ -24,8 +24,8 @@ def main():
     df = load_data()
 
     # Create subset with only required columns and first 10 rows
-    df_subset_for_testing = df[['review_id', 'review_body', 'true_labels']][0:3].copy()
-    print("Test subset shape:", df_subset_for_testing.shape)
+    # df_subset_for_testing = df[['review_id', 'review_body', 'true_labels']][0:3].copy()
+    # print("Test subset shape:", df_subset_for_testing.shape)
     print(" ---=== Load Dataframe finished ===--- ")
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -36,7 +36,7 @@ def main():
     start_time = time.time()
 
     client = OpenAIClient()
-    results_df_zero = process_reviews_with_zero_shot(df_subset_for_testing, client, model="gpt-4.1-nano")
+    results_df_zero = process_reviews_with_zero_shot(df, client, model="gpt-4.1-nano")
 
     # Save results
     results_df_zero.to_csv('data/results/zero_shot_results.csv', index=False)
@@ -52,7 +52,7 @@ def main():
         pipeline_name="Zero-Shot SynChain",
         model_name="gpt-4.1-nano",
         evaluation_file="data/results/eval_synchain_zero_shot.json",
-        dataset_size=len(df_subset_for_testing),
+        dataset_size=len(df),
         processing_time=processing_time
     )
 
@@ -65,7 +65,7 @@ def main():
     start_time = time.time()
 
     client = OpenAIClient()
-    results_df_few = process_reviews_with_few_shot(df_subset_for_testing, client, model="gpt-4.1-nano")
+    results_df_few = process_reviews_with_few_shot(df, client, model="gpt-4.1-nano")
 
     # Save results
     results_df_few.to_csv('data/results/few_shot_results.csv', index=False)
@@ -81,7 +81,7 @@ def main():
         pipeline_name="Few-Shot SynChain",
         model_name="gpt-4.1-nano",
         evaluation_file="data/results/eval_synchain_few_shot.json",
-        dataset_size=len(df_subset_for_testing),
+        dataset_size=len(df),
         processing_time=processing_time
     )
 
@@ -94,7 +94,7 @@ def main():
     start_time = time.time()
 
     client = OpenAIClient()
-    results_df_fine = process_reviews_with_finetuned(df_subset_for_testing, client, model="ft:gpt-4.1-nano-2025-04-14:personal:finetuned:BZIxyrTy")
+    results_df_fine = process_reviews_with_finetuned(df, client, model="ft:gpt-4.1-nano-2025-04-14:personal:finetuned:BZIxyrTy")
 
     # Save results
     results_df_fine.to_csv('data/results/finetuned_openai_results.csv', index=False)
@@ -110,7 +110,7 @@ def main():
         pipeline_name="Fine-Tuned OpenAI",
         model_name="ft:gpt-4.1-nano-2025-04-14:personal:finetuned:BZIxyrTy",
         evaluation_file="data/results/eval_finetuned.json",
-        dataset_size=len(df_subset_for_testing),
+        dataset_size=len(df),
         processing_time=processing_time
     )
 
