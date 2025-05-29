@@ -7,6 +7,30 @@ from recommender import Recommender
 st.set_page_config(page_title="ABSA with OpenAI", layout="wide")
 st.title("Review Analysis with OpenAI")
 
+# Instructions section
+st.markdown("## Instructions and Tips")
+
+with st.expander("📋 How to Use This Tool", expanded=False):
+    st.markdown("""
+    ### Instructions:
+    1. **Upload a CSV file** containing customer reviews or text data
+    2. **Select the text column** that contains the review content for analysis
+    3. **Choose your preferred model** from the sidebar
+    4. **Choose your preferred Strategy** (Zero-Shot, Few-Shot, or Fine-Tuned) in the sidebar
+    5. **Click "Start ABSA on CSV"** to process all reviews and wait for analysis to complete
+    6. **Download your results** with visualized Insights
+
+    ### Notes and Tips:
+    - For best results, ensure your text column contains clean, readable review text
+    - The analysis extracts aspect categories (e.g., taste, packaging, shipment) and their sentiment polarities
+    - You can also analyze single reviews using the text input section below
+    - Results include aspect extraction, sentiment classification, and AI justification
+    - This tool is optimized for food reviews but works with various review types. Note that the predictions are for
+                following categories:
+    - **Categories:** Geschmack, Verpackung, Qualität, Preis, Lieferung, Sonstiges
+    - **File limit:** Currently limited to reasonable file sizes for processing efficiency
+    """)
+
 # Sidebar
 with st.sidebar:
     st.header("Settings")
