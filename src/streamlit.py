@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 from openaiAPI import OpenAIClient
 from pipe_synchain_zero_shot import process_reviews_with_zero_shot, run_syn_chain_zero_shot
+from pipe_synchain_few_shot import process_reviews_with_few_shot
+from pipe_finetuned_gpt import process_reviews_with_finetuned
 from recommender import Recommender
 
 st.set_page_config(page_title="ABSA with OpenAI", layout="wide")
@@ -36,31 +38,73 @@ with st.sidebar:
     st.header("Settings")
     api_key = st.text_input("OpenAI API Key", type="password")
     choosen_model = st.selectbox("Model", ["gpt-4.1-nano", "ft:gpt-4.1-nano-2025-04-14:personal:finetuned:BZIxyrTy", "gpt-4.1", "ft:gpt-4.1-2025-04-14:personal:finetuned-e2e-absa:BbvtNEYh"])
+    strategy = st.selectbox("Strategy", ["Zero-Shot", "Few-Shot", "Fine-Tuned"])
 
 # Main content
 uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
 if uploaded_file:
     df = pd.read_csv(uploaded_file)
     st.write(df.head())
-    text_column = st.selectbox("Select the text column for ABSA", df.columns)
+    text_column = st.selectbox("Select the text column containing the Review", df.columns)
+    client = OpenAIClient()
+    # client = OpenAIClient(api_key)
 
-    if st.button("Start ABSA on CSV"):
-        st.write("Processing CSV file...")
-        # client = OpenAIClient(api_key)
-        client = OpenAIClient()
-        # results = process_reviews_with_zero_shot(df, client, model=choosen_model, text_column=text_column)
-        results = pd.read_csv('data/results/streamlit.csv') # Placeholder for actual processing
+    if strategy == "Zero-Shot":
+        st.write("You have selected the Zero-Shot strategy.")
+        if st.button("Start ABSA on CSV"):
+            st.write("Processing CSV file...")
+            # results = process_reviews_with_zero_shot(df, client, model=choosen_model, text_column=text_column)
+            results = pd.read_csv('data/results/streamlit.csv') # Placeholder for actual processing
 
-        # Save results
-        results.to_csv('data/results/streamlit.csv', index=False)
+            # Save results
+            results.to_csv('data/results/streamlit.csv', index=False)
 
-        # Create diagram
-        visualizer = Recommender(csv_filepath="data/results/streamlit.csv")
-        visualizer.create_diagram(label_column='predicted_labels', output_path='data/results/streamlit_diagram.png')
+            # Create diagram
+            visualizer = Recommender(csv_filepath="data/results/streamlit.csv")
+            visualizer.create_diagram(label_column='predicted_labels', output_path='data/results/streamlit_diagram.png')
 
-        # Visualize results in the Streamlit frontend
-        st.subheader("ABSA Results")
-        st.image('data/results/streamlit_diagram.png')
+            # Visualize results in the Streamlit frontend
+            st.subheader("ABSA Results")
+            st.image('data/results/streamlit_diagram.png')
+
+    elif strategy == "Few-Shot":
+        st.write("You have selected the Few-Shot strategy.")
+        if st.button("Start ABSA on CSV"):
+            st.write("Processing CSV file...")
+            # results = process_reviews_with_few_shot(df, client, model=choosen_model, text_column=text_column)
+            results = pd.read_csv('data/results/streamlit.csv') # Placeholder for actual processing
+
+            # Save results
+            results.to_csv('data/results/streamlit.csv', index=False)
+
+            # Create diagram
+            visualizer = Recommender(csv_filepath="data/results/streamlit.csv")
+            visualizer.create_diagram(label_column='predicted_labels', output_path='data/results/streamlit_diagram.png')
+
+            # Visualize results in the Streamlit frontend
+            st.subheader("ABSA Results")
+            st.image('data/results/streamlit_diagram.png')
+
+    elif strategy == "Fine-Tuned":
+        st.write("You have selected the Fine-Tuned strategy.")
+        if st.button("Start ABSA on CSV"):
+            st.write("Processing CSV file...")
+            results = process_reviews_with_finetuned(df, client, model=choosen_model, text_column=text_column)
+            results = pd.read_csv('data/results/streamlit.csv') # Placeholder for actual processing
+
+            # Save results
+            results.to_csv('data/results/streamlit.csv', index=False)
+
+            # Create diagram
+            visualizer = Recommender(csv_filepath="data/results/streamlit.csv")
+            visualizer.create_diagram(label_column='predicted_labels', output_path='data/results/streamlit_diagram.png')
+
+            # Visualize results in the Streamlit frontend
+            st.subheader("ABSA Results")
+            st.image('data/results/streamlit_diagram.png')
+    else:
+        st.write("Please select a valid strategy from the sidebar.")
+
 
 
 # Text input for single review analysis
