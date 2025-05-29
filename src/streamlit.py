@@ -39,6 +39,12 @@ with st.sidebar:
     api_key = st.text_input("OpenAI API Key", type="password")
     choosen_model = st.selectbox("Model", ["gpt-4.1-nano", "ft:gpt-4.1-nano-2025-04-14:personal:finetuned:BZIxyrTy", "gpt-4.1", "ft:gpt-4.1-2025-04-14:personal:finetuned-e2e-absa:BbvtNEYh"])
     strategy = st.selectbox("Strategy", ["Zero-Shot", "Few-Shot", "Fine-Tuned"])
+    with st.expander("ℹ️ About", expanded=False):
+        st.markdown("""
+        This tool is the practical realization of a Bachelor's thesis focused on Aspect-Based Sentiment Analysis (ABSA) using OpenAI models.
+        It demonstrates how modern language models can be leveraged to extract aspect categories and sentiment from customer reviews.
+        The project was developed as part of the requirements for the Bachelor's degree and showcases applied research in Natural Language Processing.
+        """)
 
 # Main content
 uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
@@ -53,8 +59,8 @@ if uploaded_file:
         st.write("You have selected the Zero-Shot strategy.")
         if st.button("Start ABSA on CSV"):
             st.write("Processing CSV file...")
-            # results = process_reviews_with_zero_shot(df, client, model=choosen_model, text_column=text_column)
-            results = pd.read_csv('data/results/streamlit.csv') # XXX Placeholder for actual processing
+            results = process_reviews_with_zero_shot(df, client, model=choosen_model, text_column=text_column)
+            # results = pd.read_csv('data/results/streamlit.csv') # XXX Placeholder for actual processing
 
             # Save results
             results.to_csv('data/results/streamlit.csv', index=False)
@@ -71,8 +77,8 @@ if uploaded_file:
         st.write("You have selected the Few-Shot strategy.")
         if st.button("Start ABSA on CSV"):
             st.write("Processing CSV file...")
-            # results = process_reviews_with_few_shot(df, client, model=choosen_model, text_column=text_column)
-            results = pd.read_csv('data/results/streamlit.csv') # XXX Placeholder for actual processing
+            results = process_reviews_with_few_shot(df, client, model=choosen_model, text_column=text_column)
+            # results = pd.read_csv('data/results/streamlit.csv') # XXX Placeholder for actual processing
 
             # Save results
             results.to_csv('data/results/streamlit.csv', index=False)
@@ -90,7 +96,7 @@ if uploaded_file:
         if st.button("Start ABSA on CSV"):
             st.write("Processing CSV file...")
             results = process_reviews_with_finetuned(df, client, model=choosen_model, text_column=text_column)
-            results = pd.read_csv('data/results/streamlit.csv') # XXX Placeholder for actual processing
+            # results = pd.read_csv('data/results/streamlit.csv') # XXX Placeholder for actual processing
 
             # Save results
             results.to_csv('data/results/streamlit.csv', index=False)
