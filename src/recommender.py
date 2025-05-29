@@ -84,54 +84,118 @@ class Recommender:
             print("No aspects found to plot.")
             return
 
-        sentiments = ['POSITIVE', 'NEUTRAL', 'NEGATIVE'] # Order for plotting
-        sentiment_colors = {'POSITIVE': 'green', 'NEUTRAL': 'blue', 'NEGATIVE': 'red'}
+        # Define sentiment order and colors
+        sentiments = ['POSITIVE', 'NEUTRAL', 'NEGATIVE']
+        sentiment_colors = {'POSITIVE': '#2E8B57', 'NEUTRAL': '#4682B4', 'NEGATIVE': '#DC143C'}
 
-        # Prepare data for plotting
-        plot_data = {sentiment: [] for sentiment in sentiments}
+        # Create figure with better styling
+        plt.style.use('default')
+        fig, ax = plt.subplots(figsize=(max(12, len(aspects) * 1.5), 8))
+
+        # Prepare data for plotting - only include sentiments that exist for each aspect
+        bar_positions = []
+        bar_values = []
+        bar_colors = []
+        bar_labels = []
+        tick_positions = []
+        tick_labels = []
+
+        current_position = 0
+        bar_width = 0.6
+
         for aspect in aspects:
+            aspect_sentiments = self.aspect_sentiments[aspect]
+            aspect_has_data = False
+            aspect_start = current_position
+
+            # Only plot sentiments that exist for this aspect
             for sentiment in sentiments:
-                plot_data[sentiment].append(self.aspect_sentiments[aspect].get(sentiment, 0))
+                count = aspect_sentiments.get(sentiment, 0)
+                if count > 0:
+                    bar_positions.append(current_position)
+                    bar_values.append(count)
+                    bar_colors.append(sentiment_colors[sentiment])
+                    bar_labels.append(sentiment.capitalize())
+                    current_position += bar_width + 0.1  # Small gap between bars
+                    aspect_has_data = True
 
-        num_aspects = len(aspects)
-        bar_width = 0.25
+            if aspect_has_data:
+                # Calculate center position for this aspect's label
+                aspect_end = current_position - 0.1
+                aspect_center = (aspect_start + aspect_end - bar_width) / 2
+                tick_positions.append(aspect_center)
+                tick_labels.append(aspect)
+                current_position += 0.5  # Larger gap between aspects
 
-        # Positions of the bars on the X-axis
-        r1 = np.arange(num_aspects)
-        r2 = [x + bar_width for x in r1]
-        r3 = [x + bar_width for x in r2]
+        if not bar_positions:
+            print("No sentiment data found to plot.")
+            return
 
-        index_positions = np.arange(num_aspects)
+        # Create the bars
+        bars = ax.bar(bar_positions, bar_values, width=bar_width,
+                     color=bar_colors, alpha=0.8, edgecolor='white', linewidth=0.7)
 
+        # Add value labels on top of bars
+        for i, bar in enumerate(bars):
+            height = bar.get_height()
+            ax.text(bar.get_x() + bar.get_width()/2., height + 0.05,
+                   f'{int(height)}', ha='center', va='bottom',
+                   fontsize=10, fontweight='bold')
 
-        fig, ax = plt.subplots(figsize=(14, 8))
+        # Create custom legend
+        legend_elements = []
+        for sentiment in sentiments:
+            if any(self.aspect_sentiments[aspect].get(sentiment, 0) > 0 for aspect in aspects):
+                legend_elements.append(plt.Rectangle((0,0),1,1, facecolor=sentiment_colors[sentiment],
+                                                   alpha=0.8, label=sentiment.capitalize()))
 
-        ax.bar(index_positions - bar_width, plot_data['POSITIVE'], width=bar_width,
-               label='Positive', color=sentiment_colors['POSITIVE'])
-        ax.bar(index_positions, plot_data['NEUTRAL'], width=bar_width,
-               label='Neutral', color=sentiment_colors['NEUTRAL'])
-        ax.bar(index_positions + bar_width, plot_data['NEGATIVE'], width=bar_width,
-               label='Negative', color=sentiment_colors['NEGATIVE'])
+        ax.legend(handles=legend_elements, loc='upper right', frameon=True,
+                 fancybox=True, shadow=True, fontsize=12, title='Sentiment', title_fontsize=13)
 
-        ax.set_xlabel('Aspect Category', fontweight='bold')
-        ax.set_ylabel('Frequency', fontweight='bold')
-        ax.set_title(f'Aspect Sentiment Analysis (from {label_column})', fontsize=15, fontweight='bold')
+        # Styling improvements
+        ax.set_xlabel('Aspect Categories', fontsize=14, fontweight='bold')
+        ax.set_ylabel('Frequency', fontsize=14, fontweight='bold')
+        ax.set_title(f'Aspect-Based Sentiment Analysis Results\n({label_column.replace("_", " ").title()})',
+                     fontsize=16, fontweight='bold')
 
-        ax.set_xticks(index_positions)
-        ax.set_xticklabels(aspects, rotation=45, ha="right")
-        ax.legend()
+        # Set custom tick positions and labels
+        ax.set_xticks(tick_positions)
+        ax.set_xticklabels(tick_labels, rotation=45, ha="right", fontsize=12)
 
-        ax.grid(axis='y', linestyle='--', alpha=0.7)
-        fig.tight_layout() # Adjust layout to make room for labels
+        # Grid improvements
+        ax.grid(axis='y', linestyle='--', alpha=0.3, color='gray')
+        ax.set_axisbelow(True)
+
+        # Remove top and right spines for cleaner look
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        ax.spines['left'].set_linewidth(0.5)
+        ax.spines['bottom'].set_linewidth(0.5)
+
+        # Set y-axis to start from 0 and add some padding at the top
+        ax.set_ylim(0, max(bar_values) * 1.15)
+
+        # Adjust x-axis limits to fit all bars
+        ax.set_xlim(-0.5, max(bar_positions) + bar_width + 0.5)
+
+        # Add manual padding using subplots_adjust instead
+        plt.subplots_adjust(bottom=0.15, left=0.1, right=0.95, top=0.9)
+
+        # Add subtle background color
+        fig.patch.set_facecolor('#f8f9fa')
+        ax.set_facecolor('#ffffff')
 
         if output_path:
             try:
-                plt.savefig(output_path)
+                plt.savefig(output_path, dpi=300, bbox_inches='tight',
+                           facecolor=fig.get_facecolor(), edgecolor='none')
                 print(f"Diagram saved to {output_path}")
             except Exception as e:
                 print(f"Error saving diagram: {e}")
         else:
             plt.show()
+
+        plt.close()  # Free up memory
 
 # if __name__ == '__main__':
 #     csv_file = 'data/results/few_shot_results.csv'
