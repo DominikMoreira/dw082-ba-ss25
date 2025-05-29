@@ -2,8 +2,8 @@ import streamlit as st
 import pandas as pd
 from openaiAPI import OpenAIClient
 from pipe_synchain_zero_shot import process_reviews_with_zero_shot, run_syn_chain_zero_shot
-from pipe_synchain_few_shot import process_reviews_with_few_shot
-from pipe_finetuned_gpt import process_reviews_with_finetuned
+from pipe_synchain_few_shot import process_reviews_with_few_shot, run_syn_chain_few_shot
+from pipe_finetuned_gpt import process_reviews_with_finetuned, run_finetuned
 from recommender import Recommender
 
 st.set_page_config(page_title="ABSA with OpenAI", layout="wide")
@@ -54,7 +54,7 @@ if uploaded_file:
         if st.button("Start ABSA on CSV"):
             st.write("Processing CSV file...")
             # results = process_reviews_with_zero_shot(df, client, model=choosen_model, text_column=text_column)
-            results = pd.read_csv('data/results/streamlit.csv') # Placeholder for actual processing
+            results = pd.read_csv('data/results/streamlit.csv') # XXX Placeholder for actual processing
 
             # Save results
             results.to_csv('data/results/streamlit.csv', index=False)
@@ -72,7 +72,7 @@ if uploaded_file:
         if st.button("Start ABSA on CSV"):
             st.write("Processing CSV file...")
             # results = process_reviews_with_few_shot(df, client, model=choosen_model, text_column=text_column)
-            results = pd.read_csv('data/results/streamlit.csv') # Placeholder for actual processing
+            results = pd.read_csv('data/results/streamlit.csv') # XXX Placeholder for actual processing
 
             # Save results
             results.to_csv('data/results/streamlit.csv', index=False)
@@ -90,7 +90,7 @@ if uploaded_file:
         if st.button("Start ABSA on CSV"):
             st.write("Processing CSV file...")
             results = process_reviews_with_finetuned(df, client, model=choosen_model, text_column=text_column)
-            results = pd.read_csv('data/results/streamlit.csv') # Placeholder for actual processing
+            results = pd.read_csv('data/results/streamlit.csv') # XXX Placeholder for actual processing
 
             # Save results
             results.to_csv('data/results/streamlit.csv', index=False)
@@ -112,14 +112,34 @@ st.subheader("Or analyze a single review")
 review_text = st.text_area("Enter your review text:", placeholder="Type your review here...", height=100)
 
 if review_text:
-    st.write("**Review to analyze:**")
-    st.write(review_text)
-
-    if st.button("Start ABSA"):
-        st.write("ABSA analysis started...")
-        client = OpenAIClient()
-        result = run_syn_chain_zero_shot(review_text, client, model=choosen_model)
-        st.subheader("ABSA Result")
-        st.write("**Extracted Aspect Category:**", result['aspects'])
-        st.write("**Predicted Labels:**", result['predicted_labels'])
-        st.write("**Justification:**", result['justification'])
+    if strategy == "Zero-Shot":
+        st.write("You have selected the Zero-Shot strategy for single review analysis.")
+        if st.button("Start ABSA"):
+            st.write("ABSA analysis started...")
+            client = OpenAIClient()
+            result = run_syn_chain_zero_shot(review_text, client, model=choosen_model)
+            st.subheader("ABSA Result")
+            st.write("**Extracted Aspect Category:**", result['aspects'])
+            st.write("**Predicted Labels:**", result['predicted_labels'])
+            st.write("**Justification:**", result['justification'])
+    elif strategy == "Few-Shot":
+        st.write("You have selected the Few-Shot strategy for single review analysis.")
+        if st.button("Start ABSA"):
+            st.write("ABSA analysis started...")
+            client = OpenAIClient()
+            result = run_syn_chain_few_shot(review_text, client, model=choosen_model)
+            st.subheader("ABSA Result")
+            st.write("**Extracted Aspect Category:**", result['aspects'])
+            st.write("**Predicted Labels:**", result['predicted_labels'])
+            st.write("**Justification:**", result['justification'])
+    elif strategy == "Fine-Tuned":
+        st.write("You have selected the Fine-Tuned strategy for single review analysis.")
+        if st.button("Start ABSA"):
+            st.write("ABSA analysis started...")
+            client = OpenAIClient()
+            result = run_finetuned(review_text, client, model=choosen_model)
+            st.subheader("ABSA Result")
+            st.write("**Extracted Aspect Category:**", result['aspects'])
+            st.write("**Predicted Labels:**", result['predicted_labels'])
+    else:
+        st.write("Please select a valid strategy from the sidebar.")
