@@ -83,8 +83,38 @@ class ABSAEvaluator:
 
         precision_pair = tp_pair / (tp_pair + fp_pair) if tp_pair+fp_pair else 0
         recall_pair    = tp_pair / (tp_pair + fn_pair) if tp_pair+fn_pair else 0
+        # Micro F1-Score für Paare
         f1_pair = (2 * precision_pair * recall_pair / (precision_pair + recall_pair)
                    if precision_pair+recall_pair else 0)
+
+        # Macro F1 für End-to-End-Paare - Fix the mismatch issue
+        # We need to align true and predicted pairs properly
+        all_true_pairs_aligned = []
+        all_pred_pairs_aligned = []
+
+        # Get all unique pairs that appear in either true or predicted
+        all_unique_pairs = set()
+        for r in self.records:
+            all_unique_pairs.update(r['true_pairs'])
+            all_unique_pairs.update(r['pred_pairs'])
+
+        # For each record, create aligned lists
+        for r in self.records:
+            for pair in all_unique_pairs:
+                if pair in r['true_pairs']:
+                    all_true_pairs_aligned.append(str(pair))
+                    all_pred_pairs_aligned.append(str(pair) if pair in r['pred_pairs'] else 'NONE')
+                elif pair in r['pred_pairs']:
+                    all_true_pairs_aligned.append('NONE')
+                    all_pred_pairs_aligned.append(str(pair))
+
+        # Now both lists should have the same length
+        if len(all_true_pairs_aligned) == len(all_pred_pairs_aligned) and len(all_true_pairs_aligned) > 0:
+            _, _, macro_f1_pair, _ = precision_recall_fscore_support(
+                all_true_pairs_aligned, all_pred_pairs_aligned, average='macro', zero_division=0
+            )
+        else:
+            macro_f1_pair = 0
 
         # End-to-End Pair Exact Match Ratio (Accuracy)
         pair_emr_correct = sum(1 for r in self.records if r['pred_pairs'] == r['true_pairs'])
@@ -107,16 +137,17 @@ class ABSAEvaluator:
             y_true, y_pred, average='macro', zero_division=0)
 
         return {
-            'aspect_precision' : precision_aspect,
-            'aspect_recall'    : recall_aspect,
-            'aspect_f1'        : f1_aspect,
-            'aspect_accuracy_emr': aspect_accuracy_emr,
-            'end2end_precision': precision_pair,
-            'end2end_recall'   : recall_pair,
-            'end2end_f1'       : f1_pair,
-            'end2end_accuracy_emr': end2end_accuracy_emr,
-            'polarity_accuracy': accuracy_pol,
-            'polarity_f1_macro': f1_pol
+            'aspect_precision'      : precision_aspect,
+            'aspect_recall'         : recall_aspect,
+            'aspect_f1'             : f1_aspect,
+            'aspect_accuracy_emr'   : aspect_accuracy_emr,
+            'end2end_precision'     : precision_pair,
+            'end2end_recall'        : recall_pair,
+            'end2end_f1_micro'      : f1_pair,
+            'end2end_f1_macro'      : macro_f1_pair,
+            'end2end_accuracy_emr'  : end2end_accuracy_emr,
+            'polarity_accuracy'     : accuracy_pol,
+            'polarity_f1_macro'     : f1_pol
         }
 
     def save(self, out_path: str):
@@ -128,6 +159,6 @@ class ABSAEvaluator:
             json.dump(metrics, f, indent=2, ensure_ascii=False)
 
 if __name__ == "__main__":
-    evaluator = ABSAEvaluator("data/results/finetuned_openai_results.csv")
+    evaluator = ABSAEvaluator("data/results/gpt-4.1-(2)/finetuned_openai_results.csv")
     evaluator.save("data/results/absa_evaluation.json")
     print("Evaluation abgeschlossen und gespeichert unter data/results/absa_evaluation.json")
