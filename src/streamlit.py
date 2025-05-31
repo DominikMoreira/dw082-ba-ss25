@@ -37,7 +37,7 @@ with st.expander("📋 How to Use This Tool", expanded=False):
 with st.sidebar:
     st.header("Settings")
     api_key = st.text_input("OpenAI API Key", type="password")
-    choosen_model = st.selectbox("Model", ["gpt-4.1-nano", "ft:gpt-4.1-nano-2025-04-14:personal:finetuned:BZIxyrTy", "gpt-4.1", "ft:gpt-4.1-2025-04-14:personal:finetuned-e2e-absa:BbvtNEYh"])
+    choosen_model = st.selectbox("Model", ["gpt-4.1-nano", "ft:gpt-4.1-nano-2025-04-14:personal:finetuned:BZIxyrTy", "gpt-4.1", "ft:gpt-4.1-2025-04-14:personal:finetuned-e2e-absa:BbvtNEYh", "gpt-4.1-mini", "ft:gpt-4.1-mini-2025-04-14:personal::BdLZBsRL"])
     strategy = st.selectbox("Strategy", ["Zero-Shot", "Few-Shot", "Fine-Tuned"])
     with st.expander("ℹ️ About", expanded=False):
         st.markdown("""
