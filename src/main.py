@@ -1,6 +1,4 @@
 # Orchestrates the entire process.
-import pandas as pd
-
 from pipe_synchain_zero_shot import process_reviews_with_zero_shot
 from pipe_synchain_few_shot import process_reviews_with_few_shot
 from pipe_finetuned_gpt import process_reviews_with_finetuned
@@ -10,6 +8,21 @@ from evaluate import ABSAEvaluator
 from recommender import Recommender
 from performance_tracker import PerformanceTracker
 import time
+
+"""
+This script runs the entire ABSA pipeline using different strategies:
+
+1. Zero-Shot SynChain
+2. Few-Shot SynChain
+3. Fine-Tuned OpenAI
+
+Its goal is to evaluate the performance of these strategies on a given dataset.
+
+"""
+# Set the model names for the pipelines
+model_name = "gpt-4.1-nano"
+model_name_finetuned = "ft:gpt-4.1-nano-2025-04-14:personal:finetuned:BZIxyrTy"
+# model_name_finetuned = "ft:gpt-4.1-mini-2025-04-14:personal::BdLZBsRL"
 
 def main():
 # ──────────────────────────────────────────────────────────────────────────────
@@ -36,7 +49,7 @@ def main():
     start_time = time.time()
 
     client = OpenAIClient()
-    results_df_zero = process_reviews_with_zero_shot(df, client, model="gpt-4.1-nano")
+    results_df_zero = process_reviews_with_zero_shot(df, client, model=model_name)
 
     # Save results
     results_df_zero.to_csv('data/results/zero_shot_results.csv', index=False)
@@ -50,7 +63,7 @@ def main():
     # Track performance
     tracker.add_run(
         pipeline_name="Zero-Shot SynChain",
-        model_name="gpt-4.1-nano",
+        model_name=model_name,
         evaluation_file="data/results/eval_synchain_zero_shot.json",
         dataset_size=len(df),
         processing_time=processing_time
@@ -58,14 +71,14 @@ def main():
 
     print(f"Zero-Shot Pipeline finished in {processing_time:.2f}s")
 
-# ──────────────────────────────────────────────────────────────────────────────
-# FEWSHOT PIPELINE
-# ──────────────────────────────────────────────────────────────────────────────
+# # ──────────────────────────────────────────────────────────────────────────────
+# # FEWSHOT PIPELINE
+# # ──────────────────────────────────────────────────────────────────────────────
     print(" ---=== Few-Shot Pipeline start ===--- ")
     start_time = time.time()
 
     client = OpenAIClient()
-    results_df_few = process_reviews_with_few_shot(df, client, model="gpt-4.1-nano")
+    results_df_few = process_reviews_with_few_shot(df, client, model=model_name)
 
     # Save results
     results_df_few.to_csv('data/results/few_shot_results.csv', index=False)
@@ -79,7 +92,7 @@ def main():
     # Track performance
     tracker.add_run(
         pipeline_name="Few-Shot SynChain",
-        model_name="gpt-4.1-nano",
+        model_name=model_name,
         evaluation_file="data/results/eval_synchain_few_shot.json",
         dataset_size=len(df),
         processing_time=processing_time
@@ -94,7 +107,7 @@ def main():
     start_time = time.time()
 
     client = OpenAIClient()
-    results_df_fine = process_reviews_with_finetuned(df, client, model="ft:gpt-4.1-nano-2025-04-14:personal:finetuned:BZIxyrTy")
+    results_df_fine = process_reviews_with_finetuned(df, client, model=model_name_finetuned)
 
     # Save results
     results_df_fine.to_csv('data/results/finetuned_openai_results.csv', index=False)
@@ -108,7 +121,7 @@ def main():
     # Track performance
     tracker.add_run(
         pipeline_name="Fine-Tuned OpenAI",
-        model_name="ft:gpt-4.1-nano-2025-04-14:personal:finetuned:BZIxyrTy",
+        model_name=model_name_finetuned,
         evaluation_file="data/results/eval_finetuned.json",
         dataset_size=len(df),
         processing_time=processing_time
@@ -125,10 +138,10 @@ def main():
     print(" ---=== Create diagrams start ===--- ")
     visualizer = Recommender(csv_filepath="data/results/finetuned_openai_results.csv")
     print("Generating diagram for 'predicted_labels'...")
-    visualizer.create_diagram(label_column='predicted_labels')
+    # visualizer.create_diagram(label_column='predicted_labels')
     # Example: Create and save the diagram using 'predicted_labels' to a file
     # print("\nGenerating diagram for 'predicted_labels' and saving to file...")
-    # visualizer.create_diagram(label_column='predicted_labels', output_path='data/results/predicted_sentiments_diagram.png')
+    visualizer.create_diagram(label_column='predicted_labels', output_path='data/results/predicted_sentiments_diagram.png')
     print(" ---=== Create diagrams finished ===--- ")
 
 # ──────────────────────────────────────────────────────────────────────────────
