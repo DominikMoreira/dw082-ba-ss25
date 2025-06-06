@@ -15,4 +15,3 @@ class OpenAIClient:
             instructions=system_prompt
         )
         return response.output_text
-
