@@ -37,6 +37,23 @@ SYSTEM_PROMPT_FINETUNED = (
     "[('KUNDENSERVICE', 'NEGATIVE'), ('VERPACKUNG', 'NEGATIVE')]"
 )
 
+SYSTEM_PROMPT_RECOMMENDATION = (
+    "Du bist ein KI-gestütztes Analyse- und Empfehlungssystem. Deine Aufgabe ist es, eine kompakte, maximal drei Sätze umfassende "
+    "Zusammenfassung mit klaren, umsetzbaren Empfehlungen auf Basis von vorgegebenen Aspekten und deren Sentiment-Auswertung "
+    "(Anzahl positiver, negativer und neutraler Bewertungen) zu generieren. Die Empfehlungen sollen darauf abzielen, positive "
+    "Aspekte weiter zu stärken und negative Aspekte gezielt zu verbessern. Formuliere die Empfehlungen als Fließtext, ohne Listen oder "
+    "Tabellen, und fasse dich präzise. Vermeide Wiederholungen und gehe auf jeden Aspekt entsprechend seiner Bewertung ein."
+    " Gib am Ende deiner Antwort für jede Aspektkategorie eine kurze Bewertung aus: "
+    "✅ für überwiegend positive Bewertungen, ❌ für überwiegend negative Bewertungen, ➖ für gemischte oder neutrale Bewertungen. \n"
+    "Beispiel:\n"
+    "✅ LIEFERUNG\n"
+    "❌ PREIS\n"
+    "❌ VERPACKUNG\n"
+    "❌ QUALITÄT\n"
+    "➖ GESCHMACK\n"
+    "➖ SONSTIGES\n"
+)
+
 # ──────────────────────────────────────────────────────────────────────────────
 # User-Prompt-Templates Zero-Shot
 # ──────────────────────────────────────────────────────────────────────────────
@@ -172,3 +189,52 @@ Antwort:""")
 # ──────────────────────────────────────────────────────────────────────────────
 
 USER_TEMPLATE_ABSA_FINETUNED = Template("Review:\n$review")
+
+# ──────────────────────────────────────────────────────────────────────────────
+# User-Prompt-Template: Product Recommendation
+# ──────────────────────────────────────────────────────────────────────────────
+
+USER_TEMPLATE_RECOMMENDER = Template("""\
+INPUT (NICHT MIT AUSGEBEN):
+    Beispiel 1:
+    LIEFERUNG: Negative: 8, Positive: 10, Neutral: 2
+    PREIS: Negative: 11, Positive: 3
+    VERPACKUNG: Negative: 9, Positive: 6, Neutral: 1
+    QUALITÄT: Negative: 13, Neutral: 1, Positive: 9
+    GESCHMACK: Negative: 15, Positive: 15
+    SONSTIGES: Positive: 5, Negative: 3, Neutral: 3
+
+OUTPUT (AUSGEBEN):
+    Optimieren Sie die Lieferprozesse weiter und kommunizieren Sie proaktiv, um die Kundenzufriedenheit zu erhöhen.
+    Überarbeiten Sie Ihre Preisstrategie und verbessern Sie die Verpackungs- sowie Produktqualität gezielt anhand
+    des Kundenfeedbacks. Nutzen Sie die positiven Rückmeldungen zum Geschmack für Ihr Marketing und gehen Sie auf
+    sonstige Anliegen individuell ein, um das Gesamterlebnis zu stärken.
+    ✅ LIEFERUNG
+    ❌ PREIS
+    ❌ VERPACKUNG
+    ❌ QUALITÄT
+    ➖ GESCHMACK
+    ➖ SONSTIGES
+
+INPUT (NICHT MIT AUSGEBEN):
+    LIEFERUNG: Negative: 0, Positive: 12, Neutral: 2
+    PREIS: Negative: 0, Positive: 12
+    VERPACKUNG: Negative: 10, Positive: 2
+    QUALITÄT: Negative: 5, Neutral: 2, Positive: 3
+    GESCHMACK: Negative: 0, Positive: 30
+    SONSTIGES: Positive: 10, Negative: 10, Neutral: 10
+
+OUTPUT (AUSGEBEN):
+    Kommunizieren Sie die sehr positiven Bewertungen für Lieferung, Preis und Geschmack aktiv und nutzen Sie diese
+    gezielt im Marketing. Verbessern Sie die Verpackungs- und Produktqualität anhand der negativen Rückmeldungen, um
+    die Kundenzufriedenheit weiter zu steigern. Analysieren Sie die gemischten Rückmeldungen zu sonstigen Aspekten, um
+    gezielt auf Kritikpunkte einzugehen und das Gesamterlebnis zu optimieren.
+    ✅ LIEFERUNG
+    ✅ PREIS
+    ❌ VERPACKUNG
+    ❌ QUALITÄT
+    ✅ GESCHMACK
+    ➖ SONSTIGES
+
+Jetzt du:\n"$result"
+""")

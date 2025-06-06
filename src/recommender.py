@@ -3,6 +3,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import ast
 from collections import defaultdict
+from prompts import (
+    SYSTEM_PROMPT_RECOMMENDATION,
+    USER_TEMPLATE_RECOMMENDER
+)
 
 
 class Recommender:
@@ -197,12 +201,47 @@ class Recommender:
 
         plt.close()  # Free up memory
 
-# if __name__ == '__main__':
-#     csv_file = 'data/results/few_shot_results.csv'
-#     visualizer = Recommender(csv_filepath=csv_file)
+    def generate_recommendations(self, client, model, text_column='predicted_labels'):
+
+        """
+        Generates recommendations based on the analysis results.
+
+        Args:
+            label_column (str): The column to use for sentiment data ('predicted_labels').
+        """
+        if not self._load_and_process_data(label_column=text_column):
+            print("Data loading and processing failed. Cannot generate recommendations.")
+            return
+
+        # Convert aspect_sentiments to a readable string
+        aspect_sentiments_str = ""
+        for aspect, sentiments in self.aspect_sentiments.items():
+            sentiment_strs = [f"{sentiment.capitalize()}: {count}" for sentiment, count in sentiments.items()]
+            aspect_sentiments_str += f"\n{aspect}: " + ", ".join(sentiment_strs) + "\n"
+
+        user = USER_TEMPLATE_RECOMMENDER.substitute(
+            result=aspect_sentiments_str,
+        )
+        recommendations = client.request(model, user, SYSTEM_PROMPT_RECOMMENDATION)
+
+        return recommendations
+
+if __name__ == '__main__':
+    csv_file = 'data/results/gpt-4.1-mini-(1)/few_shot_results.csv'
+    visualizer = Recommender(csv_filepath=csv_file)
 #     print("Generating diagram for 'predicted_labels'...")
 #     visualizer.create_diagram(label_column='predicted_labels')
+    print(visualizer.generate_recommendations(label_column='predicted_labels'))
+    print(f"DEBUG {visualizer.aspect_sentiments}")
+
 
 #     # Example: Create and save the diagram using 'predicted_labels' to a file
 #     # print("\nGenerating diagram for 'predicted_labels' and saving to file...")
 #     # visualizer.create_diagram(label_column='predicted_labels', output_path='data/results/predicted_sentiments_diagram.png')
+
+
+
+
+"Das Salz ist lecker, aber die Verpackung ist nicht gut."
+# Geschmack : Positiv ; Verpackung : Negativ
+# Salz : Geschmack: Postitiv; Verpackung: Verpackung: Negativ
