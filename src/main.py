@@ -20,9 +20,10 @@ Its goal is to evaluate the performance of these strategies on a given dataset.
 
 """
 # Set the model names for the pipelines
-model_name = "gpt-4.1-nano"
-model_name_finetuned = "ft:gpt-4.1-nano-2025-04-14:personal:finetuned:BZIxyrTy"
+model_name = "gpt-4.1"
+# model_name_finetuned = "ft:gpt-4.1-nano-2025-04-14:personal:finetuned:BZIxyrTy"
 # model_name_finetuned = "ft:gpt-4.1-mini-2025-04-14:personal::BdLZBsRL"
+model_name_finetuned = "ft:gpt-4.1-2025-04-14:personal:finetuned-e2e-absa:BbvtNEYh"
 
 def main():
 # ──────────────────────────────────────────────────────────────────────────────
