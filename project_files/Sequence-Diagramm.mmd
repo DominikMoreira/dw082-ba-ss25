@@ -1,0 +1,23 @@
+sequenceDiagram
+    actor User
+    participant MainOrchestrator
+    participant ModellPipeline
+    participant OpenAIAPIClient
+    participant PromptTemplates
+
+    User->>MainOrchestrator: Provide Review
+    MainOrchestrator->>ModellPipeline: Invoke Pipeline
+    ModellPipeline->>PromptTemplates: Fetch System and User Prompts
+    PromptTemplates-->>ModellPipeline: Return Prompts
+
+    ModellPipeline->>OpenAIAPIClient: Parse Review + Prompts (Step 1: Extract Aspect Categories)
+    OpenAIAPIClient-->>ModellPipeline: Return Extracted Aspect Categories
+
+    ModellPipeline->>OpenAIAPIClient: Parse Aspect Categories + Prompts (Step 2: Extract Sentiments)
+    OpenAIAPIClient-->>ModellPipeline: Return Extracted Sentiments
+
+    ModellPipeline->>OpenAIAPIClient: Parse Sentiments + Prompts (Step 3: Extract Justifications)
+    OpenAIAPIClient-->>ModellPipeline: Return Justifications
+
+    ModellPipeline-->>MainOrchestrator: Return Final Results
+    MainOrchestrator-->>User: Provide Final Output
