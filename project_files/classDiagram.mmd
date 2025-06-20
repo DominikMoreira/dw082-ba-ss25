@@ -1,0 +1,75 @@
+classDiagram
+    class RawReviewData {
+        +CSV File
+    }
+
+    class LoadData {
+        +load()
+        +prepare()
+    }
+
+    class MainOrchestrator {
+        +invokeZeroShotPipeline()
+        +invokeFewShotPipeline()
+        +invokeFineTunedPipeline()
+    }
+
+    class ZeroShotPipeline {
+        +processReviewsWithZeroShot()
+        +runSynChainZeroShot()
+    }
+
+    class FewShotPipeline {
+        +processReviewsWithFewShot()
+        +runSynChainFewShot()
+    }
+
+    class FineTunedGPTPipeline {
+        +processReviewsWithFineTuned()
+        +runFineTuned()
+    }
+
+    class OpenAIAPIClient {
+        +request(model, review, systemPrompt)
+    }
+
+    class PromptTemplates {
+        +SYSTEM_PROMPT_ASPECT
+        +SYSTEM_PROMPT_POLARITY
+        +SYSTEM_PROMPT_FINETUNED
+        +USER_TEMPLATE_ASPECT
+        +USER_TEMPLATE_POLARITY
+    }
+
+    class EvaluateResults {
+        +evaluate()
+        +save()
+    }
+
+    class ZeroShotResults {
+        +CSV File
+    }
+
+    class FewShotResults {
+        +CSV File
+    }
+
+    class FineTunedResults {
+        +CSV File
+    }
+
+    RawReviewData --> LoadData
+    LoadData --> MainOrchestrator
+    MainOrchestrator --> ZeroShotPipeline
+    MainOrchestrator --> FewShotPipeline
+    MainOrchestrator --> FineTunedGPTPipeline
+    ZeroShotPipeline --> OpenAIAPIClient
+    FewShotPipeline --> OpenAIAPIClient
+    FineTunedGPTPipeline --> OpenAIAPIClient
+    OpenAIAPIClient --> PromptTemplates
+    ZeroShotPipeline --> ZeroShotResults
+    FewShotPipeline --> FewShotResults
+    FineTunedGPTPipeline --> FineTunedResults
+    ZeroShotResults --> EvaluateResults
+    FewShotResults --> EvaluateResults
+    FineTunedResults --> EvaluateResults
