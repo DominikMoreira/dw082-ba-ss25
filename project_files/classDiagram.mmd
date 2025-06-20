@@ -1,6 +1,9 @@
 ---
 config:
   look: neo
+  layout: elk
+  class:
+    hideEmptyMembersBox: false
 ---
 classDiagram
 direction TB
@@ -58,26 +61,26 @@ direction TB
     class ZeroShotResults {
 	    +review_id: int
 	    +review_body: String
-	    +true_labels: list
-	    +predicted_labels: list
-	    +extracted_aspects: list
-	    +justification: String
+	    +true_lbls: list
+	    +pred_labels: list
+	    +extracted_aspcts: list
+	    +justifi: String
     }
     class FewShotResults {
 	    +review_id: int
 	    +review_body: String
-	    +true_labels: list
-	    +predicted_labels: list
-	    +extracted_aspects: list
-	    +justification: String
+	    +true_lbls: list
+	    +pred_labels: list
+	    +extracted_aspcts: list
+	    +justifi: String
     }
     class FineTunedResults {
 	    +review_id: int
 	    +review_body: String
-	    +true_labels: list
-	    +predicted_labels: list
-	    +extracted_aspects: list
-	    +justification: String
+	    +true_lbls: list
+	    +pred_labels: list
+	    +extracted_aspcts: list
+	    +justifi: String
     }
 
 	<<Data>> ZeroShotResults
