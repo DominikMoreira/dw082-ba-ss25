@@ -10,7 +10,7 @@ direction TB
     }
     class MainOrchestrator {
 	    +model_name: String
-        +model_name_finetuned:String
+	    +model_name_finetuned:String
 	    +invokeZeroShotPipeline()
 	    +invokeFewShotPipeline()
 	    +invokeFineTunedPipeline()
@@ -27,9 +27,6 @@ direction TB
 	    +processReviewsWithFineTuned()
 	    +runFineTuned()
     }
-    class OpenAIAPIClient {
-	    +request(model, review, systemPrompt)
-    }
     class PromptTemplates {
 	    +SYSTEM_PROMPT_ASPECT
 	    +SYSTEM_PROMPT_POLARITY
@@ -38,33 +35,62 @@ direction TB
 	    +USER_TEMPLATE_POLARITY
     }
     class EvaluateResults {
+	    -parse_label()
+	    +collect()
 	    +evaluate()
 	    +save()
     }
+    class PerformanceTracker {
+	    -results_dir: String
+	    -file: String
+	    -performance_data:Dict
+	    +load_data()
+	    +addRun()
+	    +update()
+	    +save()
+	    +printSummary()
+	    +get_comparison_report()
+    }
+    class OpenAIAPIClient {
+	    -client:OpenAI
+	    +request(model, review, systemPrompt)
+    }
     class ZeroShotResults {
-	    +CSV File
+	    +review_id: int
+	    +review_body: String
+	    +true_labels: list
+	    +predicted_labels: list
+	    +extracted_aspects: list
+	    +justification: String
     }
     class FewShotResults {
-	    +CSV File
+	    +review_id: int
+	    +review_body: String
+	    +true_labels: list
+	    +predicted_labels: list
+	    +extracted_aspects: list
+	    +justification: String
     }
     class FineTunedResults {
-	    +CSV File
+	    +review_id: int
+	    +review_body: String
+	    +true_labels: list
+	    +predicted_labels: list
+	    +extracted_aspects: list
+	    +justification: String
     }
 
-    class PerformanceTracker {
-        +startTracking()
-        +stopTracking()
-        +logPerformanceMetrics()
-        +generateReport()
-    }
+	<<Data>> ZeroShotResults
+	<<Data>> FewShotResults
+	<<Data>> FineTunedResults
 
     LoadData --> MainOrchestrator
-    MainOrchestrator --> ZeroShotPipeline
-    MainOrchestrator --> FewShotPipeline
-    MainOrchestrator --> FineTunedGPTPipeline
-    ZeroShotPipeline --> OpenAIAPIClient
-     FewShotPipeline --> OpenAIAPIClient
-    FineTunedGPTPipeline --> OpenAIAPIClient
+    MainOrchestrator o--> ZeroShotPipeline
+    MainOrchestrator o--> FewShotPipeline
+    MainOrchestrator o--> FineTunedGPTPipeline
+    ZeroShotPipeline ..|> OpenAIAPIClient
+    FewShotPipeline ..|> OpenAIAPIClient
+    FineTunedGPTPipeline ..|> OpenAIAPIClient
     OpenAIAPIClient --> PromptTemplates
     ZeroShotPipeline --> ZeroShotResults
     FewShotPipeline --> FewShotResults
@@ -73,4 +99,4 @@ direction TB
     FewShotResults --> EvaluateResults
     FineTunedResults --> EvaluateResults
     MainOrchestrator --> PerformanceTracker
-    PerformanceTracker --> EvaluateResults
+    PerformanceTracker <-- EvaluateResults
