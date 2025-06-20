@@ -1,47 +1,9 @@
-# Lädt und verarbeitet die Daten aus "cleaned_reviews.csv".
-
 import pandas as pd
-import spacy
-from sklearn.model_selection import train_test_split
 
 def load_data(file_path='data/raw/test_split.csv'):
     # Loads the data from the CSV file.
     df = pd.read_csv(file_path)
     return df
-
-def split_data(df, random_state=42):
-    """
-    Splits the dataset into training (70%), test (20%), and validation (10%) sets.
-    Maintains the same distribution of classes (Rating) across all splits.
-
-    Args:
-        df: pandas DataFrame containing the data
-        random_state: random seed for reproducibility
-
-    Returns:
-        train_df: training set (70% of data)
-        test_df: test set (20% of data)
-        val_df: validation set (10% of data)
-    """
-    # First split: 80% train+val, 20% test
-    train_val_df, test_df = train_test_split(
-        df,
-        test_size=0.2,
-        random_state=random_state
-    )
-
-    # Second split: Split train_val into 87.5% train, 12.5% val (0.875 * 80% = 70% of total)
-    train_df, val_df = train_test_split(
-        train_val_df,
-        test_size=0.125,  # 0.125 * 80% = 10% of total data
-        random_state=random_state
-    )
-
-    print(f"Training set size: {len(train_df)} ({len(train_df)/len(df)*100:.1f}%)")
-    print(f"Test set size: {len(test_df)} ({len(test_df)/len(df)*100:.1f}%)")
-    print(f"Validation set size: {len(val_df)} ({len(val_df)/len(df)*100:.1f}%)")
-
-    return train_df, test_df, val_df
 
 def export_dataframes_to_csv(train_df, test_df, val_df, output_path='data/processed/'):
     """
@@ -65,23 +27,3 @@ def export_dataframes_to_csv(train_df, test_df, val_df, output_path='data/proces
     val_df.to_csv(os.path.join(output_path, 'val.csv'), index=False)
 
     print(f"Dataframes exported to {output_path}")
-
-def lemmatize_reviews_in_dataframe(df):
-    """
-    Lemmatizes the reviews in the 'cleaned_review' column of a pandas DataFrame.
-
-    Args:
-        df (pandas.DataFrame): A DataFrame containing a 'cleaned_review' column with text data.
-
-    Returns:
-        pandas.DataFrame: The same DataFrame with the 'cleaned_review' column lemmatized.
-    """
-    nlp = spacy.load("de_core_news_lg")
-
-    def lemmatize_text(text):
-        doc = nlp(text)
-        lemmatized_text = " ".join([token.lemma_ for token in doc])
-        return lemmatized_text
-
-    df['cleaned_review'] = df['cleaned_review'].apply(lemmatize_text)
-    return df
