@@ -1,70 +1,69 @@
+---
+config:
+  look: neo
+---
 classDiagram
-    class RawReviewData {
-        +CSV File
-    }
-
+direction TB
     class LoadData {
-        +load()
-        +prepare()
+	    +load_data(file_path)
+	    +export_dataframes_to_csv()
     }
-
     class MainOrchestrator {
-        +invokeZeroShotPipeline()
-        +invokeFewShotPipeline()
-        +invokeFineTunedPipeline()
+	    +model_name: String
+        +model_name_finetuned:String
+	    +invokeZeroShotPipeline()
+	    +invokeFewShotPipeline()
+	    +invokeFineTunedPipeline()
     }
-
     class ZeroShotPipeline {
-        +processReviewsWithZeroShot()
-        +runSynChainZeroShot()
+	    +processReviewsWithZeroShot()
+	    +runSynChainZeroShot()
     }
-
     class FewShotPipeline {
-        +processReviewsWithFewShot()
-        +runSynChainFewShot()
+	    +processReviewsWithFewShot()
+	    +runSynChainFewShot()
     }
-
     class FineTunedGPTPipeline {
-        +processReviewsWithFineTuned()
-        +runFineTuned()
+	    +processReviewsWithFineTuned()
+	    +runFineTuned()
     }
-
     class OpenAIAPIClient {
-        +request(model, review, systemPrompt)
+	    +request(model, review, systemPrompt)
     }
-
     class PromptTemplates {
-        +SYSTEM_PROMPT_ASPECT
-        +SYSTEM_PROMPT_POLARITY
-        +SYSTEM_PROMPT_FINETUNED
-        +USER_TEMPLATE_ASPECT
-        +USER_TEMPLATE_POLARITY
+	    +SYSTEM_PROMPT_ASPECT
+	    +SYSTEM_PROMPT_POLARITY
+	    +SYSTEM_PROMPT_FINETUNED
+	    +USER_TEMPLATE_ASPECT
+	    +USER_TEMPLATE_POLARITY
     }
-
     class EvaluateResults {
-        +evaluate()
-        +save()
+	    +evaluate()
+	    +save()
     }
-
     class ZeroShotResults {
-        +CSV File
+	    +CSV File
     }
-
     class FewShotResults {
-        +CSV File
+	    +CSV File
     }
-
     class FineTunedResults {
-        +CSV File
+	    +CSV File
     }
 
-    RawReviewData --> LoadData
+    class PerformanceTracker {
+        +startTracking()
+        +stopTracking()
+        +logPerformanceMetrics()
+        +generateReport()
+    }
+
     LoadData --> MainOrchestrator
     MainOrchestrator --> ZeroShotPipeline
     MainOrchestrator --> FewShotPipeline
     MainOrchestrator --> FineTunedGPTPipeline
     ZeroShotPipeline --> OpenAIAPIClient
-    FewShotPipeline --> OpenAIAPIClient
+     FewShotPipeline --> OpenAIAPIClient
     FineTunedGPTPipeline --> OpenAIAPIClient
     OpenAIAPIClient --> PromptTemplates
     ZeroShotPipeline --> ZeroShotResults
@@ -73,3 +72,5 @@ classDiagram
     ZeroShotResults --> EvaluateResults
     FewShotResults --> EvaluateResults
     FineTunedResults --> EvaluateResults
+    MainOrchestrator --> PerformanceTracker
+    PerformanceTracker --> EvaluateResults
