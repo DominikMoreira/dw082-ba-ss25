@@ -1,0 +1,60 @@
+classDiagram
+direction TB
+    class LoadData {
+	    +load_data(file_path)
+	    +export_dataframes_to_csv()
+    }
+
+    class MainOrchestrator {
+	    +model_name: String
+	    +model_name_finetuned:String
+	    +pipeline(model, strategy)
+    }
+
+    class ModellPipeline {
+	    +processReviews()
+	    +runPipeline()
+    }
+
+    class OpenAIClient {
+	    -client:OpenAI
+	    +request(model, review, systemPrompt)
+    }
+
+    class PromptTemplates {
+	    +SYSTEM_PROMPT_ASPECT
+	    +SYSTEM_PROMPT_POLARITY
+	    +SYSTEM_PROMPT_FINETUNED
+	    +USER_TEMPLATE_ASPECT
+	    +USER_TEMPLATE_POLARITY
+    }
+
+    class RawReviewData {
+	    +review: String
+    }
+
+    class Results {
+	    +review: String
+	    +pred_labels: list
+	    +extracted_aspcts: list
+	    +justifi: String
+    }
+
+    class Recommender {
+	    -aspect_sentiment: Dict
+	    - csv_filepath: String
+	    +analyzeResults()
+	    +generateRecommendations()
+    }
+
+	<<Data>> RawReviewData
+	<<Data>> Results
+
+    RawReviewData --> LoadData
+    LoadData --> MainOrchestrator
+    MainOrchestrator --> ModellPipeline
+    ModellPipeline --> OpenAIClient
+    OpenAIClient --> PromptTemplates
+    ModellPipeline --> Results
+    Results --> Recommender
+
