@@ -58,20 +58,20 @@ SYSTEM_PROMPT_RECOMMENDATION = (
 # User-Prompt-Templates Zero-Shot
 # ──────────────────────────────────────────────────────────────────────────────
 
-# Schritt 1: Aspekt Extraction
+# Step 1: Aspect Extraction
 USER_TEMPLATE_ASPECT_ZEROSHOT = Template("Review:\n$review")
 
-# Schritt 2: Polarity Extraction
+# Step 2: Polarity Extraction
 USER_TEMPLATE_POLARITY_ZEROSHOT = Template("Review:\n$review\nAspects: $aspects")
 
-# Schritt 3: Validation of Results
+# Step 3: Validation of Results
 USER_TEMPLATE_VAL_ZEROSHOT = Template("Review:\n$review\nPolarities: $polarities")
 
 # ──────────────────────────────────────────────────────────────────────────────
 # User-Prompt-Templates Few-Shot
 # ──────────────────────────────────────────────────────────────────────────────
 
-# Schritt 1: Aspekt Extraction
+# Step 1: Aspect Extraction
 USER_TEMPLATE_ASPECT_FEWSHOT = Template("""\
 Beispiel 1:
 Review: "Die Verpackung war beschädigt, aber der Geschmack des Produkts war hervorragend."
@@ -101,7 +101,7 @@ Jetzt du:
 Review: "$review"
 Antwort:""")
 
-# Schritt 2: Polarity Extraction
+# Step 2: Polarity Extraction
 USER_TEMPLATE_POLARITY_FEWSHOT = Template("""\
 Beispiel 1:
 Review: "Die Verpackung war beschädigt, aber der Geschmack des Produkts war hervorragend."
@@ -138,7 +138,7 @@ Review: "$review"
 Aspekte: $aspects
 Antwort:""")
 
-# Schritt 3: Validation of Results
+# Step 3: Validation of Results
 USER_TEMPLATE_VAL_FEWSHOT = Template("""\
 Beispiel 1:
 Review: "Die Verpackung war beschädigt, aber der Geschmack des Produkts war hervorragend."

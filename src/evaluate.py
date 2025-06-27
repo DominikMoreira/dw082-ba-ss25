@@ -10,7 +10,7 @@ class ABSAEvaluator:
 
     def _parse_labels(self, label_str: str):
         """
-        Wandelt die String-Darstellung in eine Liste von (aspect, polarity)-Tuples um.
+        Converts the string representation into a list of (aspect, polarity) tuples.
         """
         try:
             return ast.literal_eval(label_str)
@@ -19,10 +19,10 @@ class ABSAEvaluator:
 
     def _collect(self):
         """
-        Erstellt für jede Zeile:
-          - true_pairs und pred_pairs als Sets
+        For each row, creates:
+          - true_pairs and pred_pairs as sets
           - true_aspects, pred_aspects
-          - label-Dicts für Polarity
+          - label dicts for polarity
         """
         for _, row in self.df.iterrows():
             true_list = self._parse_labels(row['true_labels'])
@@ -44,11 +44,11 @@ class ABSAEvaluator:
 
     def evaluate(self) -> dict:
         """
-        Führt alle drei Evaluationsstufen durch und gibt die Metriken zurück.
+        Performs all three evaluation stages and returns the metrics.
         """
         self._collect()
 
-        if not self.records: # Handle empty input
+        if not self.records:
             return {
                 'aspect_precision' : 0,
                 'aspect_recall'    : 0,
@@ -62,7 +62,7 @@ class ABSAEvaluator:
                 'polarity_f1_macro': 0
             }
 
-        # Aspekt-Erkennung
+        # Aspect Extraction
         tp_aspect = sum(len(r['pred_aspects'] & r['true_aspects']) for r in self.records)
         fp_aspect = sum(len(r['pred_aspects'] - r['true_aspects']) for r in self.records)
         fn_aspect = sum(len(r['true_aspects'] - r['pred_aspects']) for r in self.records)
@@ -76,19 +76,17 @@ class ABSAEvaluator:
         aspect_emr_correct = sum(1 for r in self.records if r['pred_aspects'] == r['true_aspects'])
         aspect_accuracy_emr = aspect_emr_correct / len(self.records)
 
-        # End-to-End Paare
+        # End-to-End pairs
         tp_pair = sum(len(r['pred_pairs'] & r['true_pairs']) for r in self.records)
         fp_pair = sum(len(r['pred_pairs'] - r['true_pairs']) for r in self.records)
         fn_pair = sum(len(r['true_pairs'] - r['pred_pairs']) for r in self.records)
 
         precision_pair = tp_pair / (tp_pair + fp_pair) if tp_pair+fp_pair else 0
         recall_pair    = tp_pair / (tp_pair + fn_pair) if tp_pair+fn_pair else 0
-        # Micro F1-Score für Paare
         f1_pair = (2 * precision_pair * recall_pair / (precision_pair + recall_pair)
                    if precision_pair+recall_pair else 0)
 
-        # Macro F1 für End-to-End-Paare - Fix the mismatch issue
-        # We need to align true and predicted pairs properly
+        # Macro F1 for End-to-End-Pairs - Fix the mismatch issue
         all_true_pairs_aligned = []
         all_pred_pairs_aligned = []
 
@@ -120,12 +118,12 @@ class ABSAEvaluator:
         pair_emr_correct = sum(1 for r in self.records if r['pred_pairs'] == r['true_pairs'])
         end2end_accuracy_emr = pair_emr_correct / len(self.records)
 
-        # Polarity-Klassifikation über alle Paare
+        # Polarity classification over all pairs
         y_true, y_pred = [], []
         for r in self.records:
             for true_aspect, true_pol in r['true_pairs']:
                 y_true.append(true_pol)
-                # falls vorhanden: Vorhersagepolarity, sonst "NONE"
+                # if present: predicted polarity, otherwise "NONE"
                 pred_pol = dict(r['pred_pairs']).get(true_aspect, 'NONE')
                 y_pred.append(pred_pol)
 
@@ -152,7 +150,7 @@ class ABSAEvaluator:
 
     def save(self, out_path: str):
         """
-        Speichert das Evaluations-Resultat als JSON.
+        Saves the evaluation result as a JSON file.
         """
         metrics = self.evaluate()
         with open(out_path, 'w', encoding='utf-8') as f:

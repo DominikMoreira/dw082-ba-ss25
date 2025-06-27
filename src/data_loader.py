@@ -1,4 +1,5 @@
 import pandas as pd
+import os
 
 def load_data(file_path='data/raw/test_split.csv'):
     # Loads the data from the CSV file.
@@ -15,7 +16,6 @@ def export_dataframes_to_csv(train_df, test_df, val_df, output_path='data/proces
         val_df: Validation dataframe
         output_path: Path where CSV files should be saved
     """
-    import os
 
     # Create directory if it doesn't exist
     if not os.path.exists(output_path):

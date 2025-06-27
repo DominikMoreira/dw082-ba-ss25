@@ -72,9 +72,9 @@ def main():
 
     print(f"Zero-Shot Pipeline finished in {processing_time:.2f}s")
 
-# # ──────────────────────────────────────────────────────────────────────────────
-# # FEWSHOT PIPELINE
-# # ──────────────────────────────────────────────────────────────────────────────
+# ──────────────────────────────────────────────────────────────────────────────
+# FEWSHOT PIPELINE
+# ──────────────────────────────────────────────────────────────────────────────
     print(" ---=== Few-Shot Pipeline start ===--- ")
     start_time = time.time()
 
@@ -148,31 +148,6 @@ def main():
 # ──────────────────────────────────────────────────────────────────────────────
 # End of the program
 # ──────────────────────────────────────────────────────────────────────────────
-
-    # # Split the data into training, test, and validation sets
-    # train_df, test_df, val_df = split_data(df)
-
-    # initlialize model
-    # model = get_model('distilbert/distilbert-base-uncased')
-    # print(" ============= Model initialized =============")
-
-    # print(" ============= Start tokenizing data =============")
-    # train_encodings = model.tokenize(train_df)
-    # test_encodings = model.tokenize(test_df)
-    # val_encodings = model.tokenize(val_df)
-    # print(train_encodings)
-    # print(" ============= Finished tokenizing =============")
-
-    # # Vorhersagen machen
-    # predictions = model.predict(tokenized_reviews)
-
-    # # Evaluieren (angenommen, 'label' ist die Zielvariable in Ihrem DataFrame)
-    # results = evaluate_model(predictions, df['label'].tolist())
-
-    # # Ergebnisse speichern
-    # save_results(results, 'bert-base-uncased')
-
-    # print("Evaluierung abgeschlossen. Ergebnisse wurden gespeichert.")
 
 if __name__ == "__main__":
     main()

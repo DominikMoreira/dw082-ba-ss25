@@ -60,20 +60,21 @@ if uploaded_file:
         st.write("Sie haben die Zero-Shot-Strategie ausgewählt.")
         if st.button("ABSA für CSV starten"):
             st.write("CSV-Datei wird verarbeitet...")
-            # results = process_reviews_with_zero_shot(df, client, model=choosen_model, text_column=text_column)
-            results = pd.read_csv('data/results/streamlit.csv') # XXX Platzhalter für tatsächliche Verarbeitung
+            results = process_reviews_with_zero_shot(df, client, model=choosen_model, text_column=text_column)
+            # results = pd.read_csv('data/results/streamlit.csv') # XXX Platzhalter für tatsächliche Verarbeitung
 
-            # Ergebnisse speichern
+            # Save results
             results.to_csv('data/results/streamlit.csv', index=False)
 
-            # Diagramm erstellen
+            # Create diagram
             visualizer = Recommender(csv_filepath="data/results/streamlit.csv")
             visualizer.create_diagram(label_column='predicted_labels', output_path='data/results/streamlit_diagram.png')
 
-            # Ergebnisse im Streamlit-Frontend visualisieren
+            # Visualize results in the Streamlit frontend
             st.subheader("ABSA-Ergebnisse")
             st.image('data/results/streamlit_diagram.png')
-            # Empfehlungen generieren und anzeigen
+
+            # Generate and display recommendations
             recommendations = visualizer.generate_recommendations(client, model=choosen_model)
             st.subheader("Handlungsempfehlungen")
             st.write(recommendations)
@@ -82,21 +83,21 @@ if uploaded_file:
         st.write("Sie haben die Few-Shot-Strategie ausgewählt.")
         if st.button("ABSA für CSV starten"):
             st.write("CSV-Datei wird verarbeitet...")
-            # results = process_reviews_with_few_shot(df, client, model=choosen_model, text_column=text_column)
-            results = pd.read_csv('data/results/streamlit.csv') # XXX Platzhalter für tatsächliche Verarbeitung
+            results = process_reviews_with_few_shot(df, client, model=choosen_model, text_column=text_column)
+            # results = pd.read_csv('data/results/streamlit.csv') # XXX Platzhalter für tatsächliche Verarbeitung
 
-            # Ergebnisse speichern
+            # Save results
             results.to_csv('data/results/streamlit.csv', index=False)
 
-            # Diagramm erstellen
+            # Create diagram
             visualizer = Recommender(csv_filepath="data/results/streamlit.csv")
             visualizer.create_diagram(label_column='predicted_labels', output_path='data/results/streamlit_diagram.png')
 
-            # Ergebnisse im Streamlit-Frontend visualisieren
+            # Visualize results in the Streamlit frontend
             st.subheader("ABSA-Ergebnisse")
             st.image('data/results/streamlit_diagram.png')
 
-            # Empfehlungen generieren und anzeigen
+            # Generate and display recommendations
             recommendations = visualizer.generate_recommendations(client, model=choosen_model)
             st.subheader("Handlungsempfehlungen")
             st.write(recommendations)
@@ -108,18 +109,18 @@ if uploaded_file:
             results = process_reviews_with_finetuned(df, client, model=choosen_model, text_column=text_column)
             # results = pd.read_csv('data/results/streamlit.csv') # XXX Platzhalter für tatsächliche Verarbeitung
 
-            # Ergebnisse speichern
+            # Save results
             results.to_csv('data/results/streamlit.csv', index=False)
 
-            # Diagramm erstellen
+            # Create diagram
             visualizer = Recommender(csv_filepath="data/results/streamlit.csv")
             visualizer.create_diagram(label_column='predicted_labels', output_path='data/results/streamlit_diagram.png')
 
-            # Ergebnisse im Streamlit-Frontend visualisieren
+            # Visualize results in the Streamlit frontend
             st.subheader("ABSA-Ergebnisse")
             st.image('data/results/streamlit_diagram.png')
 
-            # Empfehlungen generieren und anzeigen
+            # Generate and display recommendations
             recommendations = visualizer.generate_recommendations(client, model=choosen_model)
             st.subheader("Handlungsempfehlungen")
             st.write(recommendations)
@@ -128,7 +129,7 @@ if uploaded_file:
 
 
 
-# Texteingabe für Einzelbewertungsanalyse
+# Text input for single review analysis
 st.subheader("Oder analysieren Sie eine einzelne Bewertung")
 review_text = st.text_area("Geben Sie Ihren Bewertungstext ein:", placeholder="Geben Sie hier Ihre Bewertung ein...", height=100)
 

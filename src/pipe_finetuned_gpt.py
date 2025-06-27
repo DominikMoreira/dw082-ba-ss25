@@ -5,6 +5,7 @@ from prompts import (
 
 from openaiAPI import OpenAIClient
 import pandas as pd
+import ast
 
 def extract_first_elements(list_of_tuples):
     """
@@ -36,14 +37,10 @@ def extract_first_elements(list_of_tuples):
 
 def run_finetuned(review: str, client: OpenAIClient, model):
     user = USER_TEMPLATE_ABSA_FINETUNED.substitute(review=review)
-    response_labels = client.request(model, user, SYSTEM_PROMPT_FINETUNED) # This is expected to be like [('ASPECT', 'POLARITY'), ...]
+    response_labels = client.request(model, user, SYSTEM_PROMPT_FINETUNED)
 
-    # Ensure response_labels is a list, even if the model returns a string representation of a list
-    # This might need more robust parsing depending on actual model output format
     if isinstance(response_labels, str):
         try:
-            # A more robust parsing might be needed if the string is not perfectly formatted
-            import ast
             parsed_labels = ast.literal_eval(response_labels)
             if not isinstance(parsed_labels, list):
                 print(f"Warning: Parsed response_labels is not a list: {parsed_labels}. Treating as empty.")

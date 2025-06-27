@@ -14,7 +14,7 @@ def run_syn_chain_zero_shot(review: str, client: OpenAIClient, model):
 
     # Step 2: Polarity Extraction
     user2 = USER_TEMPLATE_POLARITY_ZEROSHOT.substitute(review=review, aspects=", ".join(aspects))
-    aspect_polarity = client.request(model, user2, SYSTEM_PROMPT_POLARITY) # [(GESCHMACK: POSITIV), (PREIS: NEGATIV)]
+    aspect_polarity = client.request(model, user2, SYSTEM_PROMPT_POLARITY)
 
     # Step 3: Validation of Results
     user3 = USER_TEMPLATE_VAL_ZEROSHOT.substitute(

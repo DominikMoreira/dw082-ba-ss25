@@ -14,7 +14,7 @@ def run_syn_chain_few_shot(review: str, client: OpenAIClient, model):
 
     # Step 2: Polarity Extraction
     user2 = USER_TEMPLATE_POLARITY_FEWSHOT.substitute(review=review, aspects=", ".join(aspects))
-    aspect_polarity = client.request(model, user2, SYSTEM_PROMPT_POLARITY) # [(GESCHMACK: POSITIV), (PREIS: NEGATIV)]
+    aspect_polarity = client.request(model, user2, SYSTEM_PROMPT_POLARITY)
 
     # Step 3: Validation of Results
     user3 = USER_TEMPLATE_VAL_FEWSHOT.substitute(

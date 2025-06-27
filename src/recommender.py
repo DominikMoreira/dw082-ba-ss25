@@ -1,6 +1,5 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-import numpy as np
 import ast
 from collections import defaultdict
 from prompts import (
@@ -129,7 +128,7 @@ class Recommender:
                 aspect_center = (aspect_start + aspect_end - bar_width) / 2
                 tick_positions.append(aspect_center)
                 tick_labels.append(aspect)
-                current_position += 0.5  # Larger gap between aspects
+                current_position += 0.5
 
         if not bar_positions:
             print("No sentiment data found to plot.")
@@ -232,16 +231,6 @@ if __name__ == '__main__':
 #     print("Generating diagram for 'predicted_labels'...")
 #     visualizer.create_diagram(label_column='predicted_labels')
     print(visualizer.generate_recommendations(label_column='predicted_labels'))
-    print(f"DEBUG {visualizer.aspect_sentiments}")
-
-
 #     # Example: Create and save the diagram using 'predicted_labels' to a file
 #     # print("\nGenerating diagram for 'predicted_labels' and saving to file...")
 #     # visualizer.create_diagram(label_column='predicted_labels', output_path='data/results/predicted_sentiments_diagram.png')
-
-
-
-
-"Das Salz ist lecker, aber die Verpackung ist nicht gut."
-# Geschmack : Positiv ; Verpackung : Negativ
-# Salz : Geschmack: Postitiv; Verpackung: Verpackung: Negativ
